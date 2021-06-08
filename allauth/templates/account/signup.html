@@ -1,0 +1,152 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.0/css/all.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'web/css/login.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% load socialaccount %}
+
+{% get_providers as socialaccount_providers %}
+
+<!-- <h1>{% trans "Sign Up" %}</h1>
+
+<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
+</form> -->
+
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-4 mx-auto">
+  <div class="card card0 border-0">
+    <div class="row d-flex">
+      <div class="col-lg-6">
+        <div class="card1 pb-5">
+          <!-- <div class="row"> <img src="https://i.imgur.com/CXQmsmF.png" class="logo"> </div> -->
+          <div class="row px-3 justify-content-center mt-5 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png"
+              class="image"> </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card2 card border-0 px-4 py-5">
+          <form class="signup" id="signup_form" method="POST" action="{% url 'account_signup' %}">
+            {% csrf_token %}
+            <div class="row social_login mb-4 px-3">
+              {% for provider in socialaccount_providers %}
+              <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
+                href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+                <li>
+                  <div class="social-icon">
+                    <i class="fab fa-{{provider.name|lower}}"></i>
+                  </div>
+                  <div class="social-text">
+                    <span>SignUp With {{provider.name}} </span>
+                  </div>
+                </li>
+              </a>
+              {% endfor %}
+              <!-- <h6 class="mb-0 mr-4 mt-2">Sign in with</h6>
+                      <div class="facebook text-center mr-3">
+                          <div class="fa fa-facebook"></div>
+                      </div>
+                      <div class="twitter text-center mr-3">
+                          <div class="fa fa-twitter"></div>
+                      </div>
+                      <div class="linkedin text-center mr-3">
+                          <div class="fa fa-linkedin"></div>
+                      </div> -->
+            </div>
+            <div class="row px-3 mb-4">
+              <div class="line"></div> <small class="or text-center">Or</small>
+              <div class="line"></div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6 px-3">
+                <label class="mb-1" for="id_fname">
+                  <h6 class="mb-0 text-sm">First Name</h6>
+                </label>
+                <input class="" type="text" name="fname" required id="id_fname"
+                  placeholder="First Name">
+              </div>
+              <div class="col-sm-6 px-3">
+                <label class="mb-1" for="id_lname">
+                  <h6 class="mb-0 text-sm">Last Name</h6>
+                </label>
+                <input class="" type="text" name="lname" required id="id_lname"
+                  placeholder="Last Name">
+              </div>
+            </div>
+            <div class="row px-3">
+              <label class="mb-1" for="id_username">
+                <h6 class="mb-0 text-sm">Username</h6>
+              </label>
+              <input class="" type="text" name="username" required id="id_username"
+              placeholder="Enter a valid username">
+            </div>
+            <div class="row px-3">
+              <label class="mb-1" for="id_email">
+                <h6 class="mb-0 text-sm">Email</h6>
+              </label>
+              <input type="email" name="email" placeholder="Enter Email" required id="id_email">
+            </div>
+            <div class="row px-3">
+              <label class="mb-1" for="id_password">
+                <h6 class="mb-0 text-sm">Enter Password</h6>
+              </label>
+              <input type="password" name="password" placeholder="Enter password" required id="id_password">
+            </div>
+            <div class="row px-3">
+              <label class="mb-1" for="id_password">
+                <h6 class="mb-0 text-sm">Confirm Password</h6>
+              </label>
+              <input type="password" name="password" placeholder="Enter password" required id="id_password">
+            </div>
+            <!-- <div class="row px-3 mb-4">
+              <div class="custom-control custom-checkbox custom-control-inline"> 
+                <input id="chk1" type="checkbox"
+                  name="remember" id="id_remember" class="custom-control-input"> 
+                  <label for="id_remember" class="custom-control-label text-sm">
+                    Remember me
+                  </label> 
+              </div>
+              <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+            </div> -->
+            <div class="row mb-3 px-3 py-3"> <button type="submit" class="btn btn-blue text-center">Signup</button> </div>
+            <div class="row mb-4 px-3"> <small class="font-weight-bold">Already have an account? <a class="text-danger "
+                  href="{{ login_url }}">Login</a></small> </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="footer bg-blue py-4">
+      <div class="row px-3"> <small class="ft-text ml-4 ml-sm-5 mb-2">Copyright © 2019. All rights reserved.</small>
+      </div>
+    </div>
+    <script>
+      const dt = new Date();
+      const year = dt.getFullYear();
+      const ft = document.querySelector('.ft-text');
+      ft.innerHTML = `Copyright © ${year}. All rights reserved. This project is developed by Ritik Jaiswal`;
+    </script>
+  </div>
+</div>
+
+
+{% endblock %}
