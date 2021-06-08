@@ -1,0 +1,20 @@
+nav{
+    padding-left: 2rem;
+    padding-right: 2rem;
+    min-height: 4rem;
+}
+.navbar{
+    box-shadow:  0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+}
+.navbar-collapse{
+    justify-content: flex-end;
+}
+@media(min-width:992px){
+    .user{
+        border-right: 1px solid black;
+    }
+    nav{
+        padding-right: 16%;
+    }
+    
+}

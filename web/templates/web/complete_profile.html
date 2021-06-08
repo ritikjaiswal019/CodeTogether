@@ -1,0 +1,151 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Signup" %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"> -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.0/css/all.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{% static 'web/css/login.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% load socialaccount %}
+
+{% get_providers as socialaccount_providers %}
+
+<!-- <h1>{% trans "Sign Up" %}</h1>
+
+<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+
+<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
+</form> -->
+
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-4 mx-auto">
+  <div class="card card0 border-0">
+    <div class="row d-flex">
+      <div class="col-lg-6">
+        <div class="card1 pb-5">
+          <!-- <div class="row"> <img src="https://i.imgur.com/CXQmsmF.png" class="logo"> </div> -->
+          <div class="row px-3 justify-content-center mt-5 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png"
+              class="image"> </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card2 card border-0 px-4 py-5">
+          <form class="signup" id="signup_form" method="POST" action="{% url 'complete_profile' %}">
+            {% csrf_token %}
+            
+            <div class="row justify-content-center px-3 mb-4">
+              Complete Your Profile 
+            </div>
+            <div class="row">
+              <div class="col-sm-6 px-3">
+                <label class="mb-1" for="id_fname">
+                  <h6 class="mb-0 text-sm">First Name</h6>
+                </label>
+                <input class="" type="text" name="fname" required id="id_fname"
+                  placeholder="First Name" value ="{{request.user.first_name}}">
+              </div>
+              <div class="col-sm-6 px-3">
+                <label class="mb-1" for="id_lname">
+                  <h6 class="mb-0 text-sm">Last Name</h6>
+                </label>
+                <input class="" type="text" name="lname" required id="id_lname"
+                  placeholder="Last Name" value ="{{request.user.last_name}}">
+              </div>
+            </div>
+            <div class="row px-3 rel-for-us">
+              <label class="mb-1" for="id_username">
+                <h6 class="mb-0 text-sm">Username (Note: username must be atleast 4 characters long)</h6>
+              </label>
+              <input  class="" type="text" name="username" required id="id_username"
+              placeholder="Enter a valid username" value ="{{request.user.username}}">
+              <span class="username-check">Available <i class="far fa-check-circle"></i></span>
+            </div>
+            <div class="row px-3">
+              <label class="mb-1" for="id_email">
+                <h6 class="mb-0 text-sm">Email</h6>
+              </label>
+              <input {% if request.user.email|length > 0 %} disabled {% endif %} type="email" name="email" placeholder="Enter Email" value ="{{request.user.email}}" required id="id_email">
+            </div>
+            {% if pset is True %}
+                <div class="row px-3">
+                <label class="mb-1" for="id_password">
+                    <h6 class="mb-0 text-sm">Enter Password</h6>
+                </label>
+                <input type="password" name="password" placeholder="Enter password" required id="id_password">
+                </div>
+                <div class="row px-3">
+                <label class="mb-1" for="id_password1">
+                    <h6 class="mb-0 text-sm">Confirm Password</h6>
+                </label>
+                <input type="password" name="password1" placeholder="Enter password" required id="id_password1">
+                </div>
+            {% endif %}
+            <!-- <div class="row px-3 mb-4">
+              <div class="custom-control custom-checkbox custom-control-inline"> 
+                <input id="chk1" type="checkbox"
+                  name="remember" id="id_remember" class="custom-control-input"> 
+                  <label for="id_remember" class="custom-control-label text-sm">
+                    Remember me
+                  </label> 
+              </div>
+              <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+            </div> -->
+            <div class="row mb-3 px-3 py-3"> <button type="submit" class="btn btn-blue text-center">Continue &#187;</button> </div>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="footer bg-blue py-4">
+      <div class="row px-3"> <small class="ft-text ml-4 ml-sm-5 mb-2"></small>
+      </div>
+    </div>
+    <script>
+      const dt = new Date();
+      const year = dt.getFullYear();
+      const ft = document.querySelector('.ft-text');
+      ft.innerHTML = `Copyright © ${year}. All rights reserved. This project is developed by Ritik Jaiswal`;
+    </script>
+  </div>
+</div>
+
+<script>
+    const uname = document.querySelector('#id_username');
+    const ucheck = document.querySelector('.username-check');
+    const unlab = uname.previousElementSibling.querySelector('h6'); 
+    var lst = (`{{userlist}}`.replaceAll("&#x27;",""));
+    lst = lst.replaceAll("[","");
+    lst = lst.replaceAll("]","");
+    lst = lst.replaceAll(" ","");
+    var lt = lst.split(",");
+    const curr = `{{request.user.username}}`;
+    uname.addEventListener('keyup',()=>{
+        console.log(`${uname.value}`.trim().length);
+        if((lt.indexOf(`${uname.value}`.trim()) >= 0 && uname.value != curr ) || (`${uname.value}`.trim().length) <4){
+            ucheck.innerHTML = `Unavailable <i class="far fa-times-circle"></i>`;
+        }
+        else{
+            ucheck.innerHTML = `Available <i class="far fa-check-circle"></i>`;
+        }
+    });
+    
+</script>
+
+
+{% endblock %}
