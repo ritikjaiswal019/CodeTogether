@@ -3,10 +3,13 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 import allauth
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from .models import UserInfo
 from django.http import JsonResponse
 import json
+import os
 
 fs = FileSystemStorage()
+
 
 # Create your views here.
 
@@ -76,7 +79,37 @@ def update_basic_info(request):
         return redirect('account_login')
 
 def update_other_info(request):
-    pass
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            cuser = request.user
+            abt = request.POST['about']
+            ldnurl = request.POST['linkedinurl']
+            stpr = request.POST['storprof']
+            plow = request.POST['placeofwork']
+            gradyr = request.POST['gradyear']
+            # print('\n****** DETAILS  ******\n ', abt,' ', ldnurl,' ', stpr,' ', plow,' ', gradyr)
+            messages.success(request,'Your Changes has been successfully saved')
+            if UserInfo.objects.all().filter(uname = cuser).exists():
+                cuserinfo = UserInfo.objects.all().filter(uname = cuser)
+                cuserinfo = cuserinfo[0]
+                cuserinfo.about = abt
+                cuserinfo.linkedin = ldnurl
+                cuserinfo.storprof = stpr.capitalize()
+                cuserinfo.where_do_you_work = plow
+                cuserinfo.graduation_year = gradyr
+                cuserinfo.save()
+                return redirect('profile')
+            else:
+                cuserinfo = UserInfo(uname=cuser, about=abt, linkedin=ldnurl, storprof=stpr, where_do_you_work=plow, graduation_year=gradyr)
+                cuserinfo.save()
+                return redirect('profile')
+        else:
+            messages.danger(request,'Invalid Attempt, Please try again !!')
+            return redirect('profile')
+    else:
+        messages.danger(request, 'Invalid Attempt, Login To Continue')
+        return redirect('account_login')
+
 
 def profile(request):
     User = get_user_model()
@@ -89,14 +122,19 @@ def profile(request):
         dp = True
     else:
         dp = False
-    return render(request, 'web/view_profile.html',{
-        "userlist":userlist,
+    return render(request, 'web/edit_profile.html',{
         "dp_exists":dp,
     })
 
 
 def view_profile(request, uname):
-    return HttpResponse(f"Profile of {uname}")
+    if fs.exists(request.user.email+"_pic.jpeg"):
+        dp = True
+    else:
+        dp = False
+    return render(request, 'web/view_profile.html',{
+        "dp_exists":dp,
+    })
 
 def check_username_availability(request):
     if request.method == "POST":
@@ -121,5 +159,4 @@ def remove_profile(request):
     if request.method == "POST":
         if fs.exists(request.user.email+"_pic.jpeg"):
             fs.delete(request.user.email+"_pic.jpeg")
-            
-        return redirect('profile')
+    return redirect('profile')

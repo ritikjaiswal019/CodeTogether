@@ -12,15 +12,5 @@ urlpatterns = [
     path('accounts/check_username_availability', csrf_exempt(views.check_username_availability), name="check_username_availability"),
     path('accounts/upload_img', views.upload_img, name="upload_img"),
     path('accounts/remove_profile', views.remove_profile, name="remove_profile"),
-    # path('login/', views.loginPage, name="loginPage"),
-    # path('login/authenticate', views.loginUser, name="loginUser"),
-    # path('logout', views.logoutUser, name="logoutUser"),
-    # path('signup/', views.signUp, name="signUp"),
-    # path('signupUser/', views.signupUser, name="signupUser"),   
-    # path('account/', views.account, name="accountPage"),
-    # path('account/forgot_password', views.forgotPassword, name="forgotPassword"),
-    # path('account/forgot_password_successful', views.forgotPasswordSuccessful, name="forgotPasswordSuccessful"),
-    # path('account/change_password', views.changePassword, name="changePassword"),
-    # path('account/change_password_successful', views.changePasswordSuccessful, name="changePasswordSuccessful"),
 
 ]

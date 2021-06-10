@@ -1,0 +1,406 @@
+{% extends "web/basic.html" %}
+{% load static %}
+
+{% block title%}Profile{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'web/css/profile.css' %}">
+<!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+	integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+	crossorigin="anonymous"></script>
+<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script> -->
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block body %}
+
+<!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"> -->
+<div class="container my-4">
+	<div class="row ">
+		<div class="col col-lg-auto mb-3" style="width: 200px;">
+			<div class="card p-3">
+				<div class="e-navlist e-navlist--active-bg">
+					<ul class="nav">
+						<li class="nav-item"><a class="nav-link px-2 active" href="#"><i
+									class="fa fa-fw fa-bar-chart me-1"></i><span>Overview</span></a></li>
+						<li class="nav-item"><a class="nav-link px-2"
+								href="https://www.bootdey.com/snippets/view/bs4-crud-users" target="__blank"><i
+									class="fa fa-fw fa-th me-1"></i><span>CRUD</span></a></li>
+						<li class="nav-item"><a class="nav-link px-2"
+								href="https://www.bootdey.com/snippets/view/bs4-edit-profile-page" target="__blank"><i
+									class="fa fa-fw fa-cog me-1"></i><span>Settings</span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 col-lg-9">
+			<div class="row">
+				<div class="col mb-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="e-profile">
+								<div class="row">
+									<div class="col-12 col-sm-auto mb-3">
+										<div class="mx-auto" style="width: 140px;">
+											<div class="userimage d-flex justify-content-center align-items-center rounded"
+												style="height: 140px; background-color: rgb(233, 236, 239);">
+												<!-- <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span> -->
+												{% if dp_exists %}
+												<img src="/media/{{request.user.email}}_pic.jpeg" alt="">
+												{% else %}
+												<img src="{% static 'web/imgs/user.jpg' %}" alt="">
+												{% endif %}
+											</div>
+										</div>
+									</div>
+									<div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
+										<div class="text-center text-sm-left mb-2 mb-sm-0">
+											<h4 class="pt-sm-2 pb-1 mb-0 text-nowrap text-start">
+												{{request.user.first_name}} {{request.user.last_name}}</h4>
+											<p class="mb-0 text-start">@{{request.user.username}}</p>
+											<!-- <div class="text-muted"><small>Last seen 2 hours ago</small></div> -->
+											<div class="mt-2">
+												<div class="collapse">
+													<form action="{% url 'upload_img' %}" method="POST"
+														enctype="multipart/form-data">
+														{% csrf_token %}
+														<input type="file" name="new_image" id="new_image"
+															class="btn text-start ps-0 d-block" value=""
+															accept="image/*">
+														<div class="text-start">
+															<button type="submit"
+																class="btn btn-outline-success text-start upload-btn">Upload</button>
+															<button type="button"
+																class="upload-toggle-back btn btn-outline-danger text-start">Cancel</button>
+														</div>
+													</form>
+												</div>
+												<div class="text-start">
+													<button class="upload-toggle btn btn-primary " type="file">
+														<i class="fa fa-fw fa-camera"></i>
+														<span>Change Photo</span>
+													</button>
+													{% if dp_exists %}
+													<!-- Button trigger Remove Profile Picture modal -->
+													<button type="button" class="btn btn-outline-danger d-block mt-2"
+														data-bs-toggle="modal" data-bs-target="#removeDpModal">
+														Remove Profile Picture
+													</button>
+                                                    {% endif %}
+
+													<!-- Modal -->
+													<div class="modal fade" id="removeDpModal" tabindex="-1"
+														aria-labelledby="removeDpModalLabel" aria-hidden="true">
+														<div class="modal-dialog">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title" id="removeDpModalLabel">
+																		Remove Profile Picture</h5>
+																	<button type="button" class="btn-close"
+																		data-bs-dismiss="modal"
+																		aria-label="Close"></button>
+																</div>
+																<div class="modal-body">
+																	Are you sure you want to remove profile picture
+																</div>
+																<div class="modal-footer">
+																	<button type="button"
+																		class="btn btn-outline-secondary"
+																		data-bs-dismiss="modal">Close</button>
+																	<form action="{% url 'remove_profile' %}"
+																		method="POST">
+																		{% csrf_token %}
+																		<button type="submit"
+																			class="btn btn-outline-danger">Confirm</button>
+																	</form>
+																</div>
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+										<div class="text-center text-sm-right">
+											<span class="badge badge-secondary text-dark">
+												{% if request.user.is_superuser %}
+												Administrator
+												{% else %}
+												User
+												{% endif %}
+											</span>
+											<div class="text-muted"><small>{{ request.user.date_joined.date }}</small>
+											</div>
+										</div>
+									</div>
+								</div>
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item" role="presentation">
+										<button class="nav-link active" id="basic-tab" data-bs-toggle="tab"
+											data-bs-target="#basic" type="button" role="tab" aria-controls="basic"
+											aria-selected="true">Basic Info</button>
+									</li>
+									<li class="nav-item" role="presentation">
+										<button class="nav-link" id="professional-tab" data-bs-toggle="tab"
+											data-bs-target="#professional" type="button" role="tab"
+											aria-controls="professional" aria-selected="false">Other Info</button>
+									</li>
+									<li class="nav-item" role="presentation">
+										<button class="nav-link" id="security-tab" data-bs-toggle="tab"
+											data-bs-target="#security" type="button" role="tab" aria-controls="security"
+											aria-selected="false">Security</button>
+									</li>
+								</ul>
+								<div class="tab-content" id="myTabContent">
+									<div class="tab-pane fade show active" id="basic" role="tabpanel"
+										aria-labelledby="basic-tab">
+										<form class="form" novalidate="" method="POST"
+											action="{% url 'update_basic_info' %}">
+											{% csrf_token %}
+											<div class="row">
+												<div class="col">
+													<div class="row my-3">
+														<div class="col">
+															<div class="form-group">
+																<label>First Name</label>
+																<input class="form-control" type="text" name="fname"
+																	placeholder="First Name"
+																	value="{{request.user.first_name}}">
+															</div>
+														</div>
+														<div class="col">
+															<div class="form-group">
+																<label>Last Name</label>
+																<input class="form-control" type="text" name="lname"
+																	placeholder="Last Name"
+																	value="{{request.user.last_name}}">
+															</div>
+														</div>
+													</div>
+													<div class="row  my-3">
+														<div class="col">
+															<div class="form-group rel-for-us">
+																<label>Username</label>
+																<input class="form-control" type="text" name="username"
+																	placeholder="username" id="username"
+																	value="{{request.user.username}}">
+																<span class="username-check">Available <i
+																		class="far fa-check-circle"></i></span>
+															</div>
+														</div>
+													</div>
+													<div class="row  my-3">
+														<div class="col">
+															<div class="form-group">
+																<label>Email</label>
+																<input class="form-control" disabled type="email"
+																	placeholder="{{request.user.email}}"
+																	value="{{request.user.email}}">
+															</div>
+														</div>
+													</div>
+
+												</div>
+											</div>
+											<div class="row">
+												<div class="col d-flex justify-content-end">
+													<button class="btn btn-primary" type="submit">Save Changes</button>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="tab-pane fade" id="professional" role="tabpanel"
+										aria-labelledby="professional-tab">
+										<form class="form" novalidate="" method="POST" action="{% url 'update_other_info' %}">
+											{% csrf_token %}
+											<div class="row  mt-3">
+												<div class="col mb-3">
+													<div class="form-group">
+														<label>About</label>
+														<textarea class="form-control" rows="5" name="about"
+															placeholder="My Bio">{{request.user.userinfo.about}}</textarea>
+													</div>
+												</div>
+											</div>
+											<div class="row  my-3">
+												<div class="col">
+													<div class="form-group">
+														<label>Linkedin</label>
+														<input class="form-control" type="linkedin" name="linkedinurl"
+															placeholder="Enter Your LinkedIn URL" value="{{request.user.userinfo.linkedin}}">
+													</div>
+												</div>
+											</div>
+											<div class="row  my-3">
+												<div class="col">
+													<div class="form-group">
+														<label>Are you a Student or a Professional: <span
+																class="text-danger">*</span></label>
+														<!-- <input class="form-control" type="text" name="" placeholder="" value=""> -->
+														<div>
+															<div class="form-check form-check-inline">
+																<input class="form-check-input" type="radio" {% if request.user.userinfo.storprof == "Student" %} checked {% endif %}
+																	name="storprof" id="student"
+																	value="student">
+																<label class="form-check-label" 
+																	for="student">Student</label>
+															</div>
+															<div class="form-check form-check-inline">
+																<input class="form-check-input" type="radio"
+																	name="storprof" id="professional" {% if request.user.userinfo.storprof == "Professional" %} checked {% endif %}
+																	value="professional">
+																<label class="form-check-label"
+																	for="professional">Professional</label>
+															</div>
+															<div class="form-check form-check-inline">
+																<input class="form-check-input" type="radio"
+																	name="storprof" id="other" value="other" {% if request.user.userinfo.storprof == "Other" %} checked {% endif %} >
+																<label class="form-check-label"
+																	for="other" >Other</label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row  my-3">
+												<div class="col">
+													<div class="form-group">
+														<label>Where do you study? <span
+																class="text-danger">*</span></label>
+														<input class="form-control" type="text" name="placeofwork"
+															placeholder="" value="{{request.user.userinfo.where_do_you_work}}">
+													</div>
+												</div>
+											</div>
+											<div class="row  my-3">
+												<div class="col">
+													<div class="form-group">
+														<label>Expected Graduation Year</label>
+														<input class="form-control" required type="number" name="gradyear" placeholder=""
+															value="{{request.user.userinfo.graduation_year}}">
+													</div>
+												</div>
+											</div>
+											<div class="row  my-3">
+												<div class="col-12 col-sm-5 offset-sm-1 mb-3">
+													<div class="mb-2"><b>Keeping in Touch</b></div>
+													<div class="row">
+														<div class="col">
+															<label>Email Notifications</label>
+															<div class="custom-controls-stacked px-2">
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" class="custom-control-input"
+																		id="notifications-blog" checked="">
+																	<label class="custom-control-label"
+																		for="notifications-blog">Blog posts</label>
+																</div>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" class="custom-control-input"
+																		id="notifications-news" checked="">
+																	<label class="custom-control-label"
+																		for="notifications-news">Newsletter</label>
+																</div>
+																<div class="custom-control custom-checkbox">
+																	<input type="checkbox" class="custom-control-input"
+																		id="notifications-offers" checked="">
+																	<label class="custom-control-label"
+																		for="notifications-offers">Personal
+																		Offers</label>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col d-flex justify-content-end mt-4">
+													<button class="btn btn-primary" type="submit">Save Changes</button>
+												</div>
+											</div>
+										</form>
+									</div>
+									<div class="tab-pane fade" id="security" role="tabpanel"
+										aria-labelledby="security-tab">
+										<div class="my-4 text-center">
+											<a href="{% url 'account_change_password'%}"
+												class="btn btn-outline-primary mx-2">Change Password</a>
+											<a href="{% url 'account_reset_password' %}"
+												class="btn btn-outline-primary mx-2">Reset Password</a>
+											<a href="" class="btn btn-outline-danger mx-2">Delete Account</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-3 mb-3">
+					<div class="card mb-3">
+						<div class="card-body">
+							<div class="px-xl-3">
+								<a href="{% url 'account_logout' %}" class="btn btn-block btn-secondary">
+									<i class="fa fa-sign-out"></i>
+									<span>Logout</span>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<h6 class="card-title font-weight-bold">Support</h6>
+							<p class="card-text">Get fast, free help from our friendly assistants.</p>
+							<button type="button" class="btn btn-primary">Contact Us</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<script src="{% static 'web/js/check_username_availability.js'%}"></script>
+<script>
+	const uploadToggle = document.querySelector('.upload-toggle');
+	const uploadToggleBack = document.querySelector('.upload-toggle-back');
+	const n1 = uploadToggle.parentElement;
+	const n2 = uploadToggleBack.parentElement.parentElement.parentElement;
+	uploadToggle.addEventListener('click', () => {
+		n2.classList.remove('collapse');
+		n1.classList.add('collapse');
+	});
+	uploadToggleBack.addEventListener('click', () => {
+		n1.classList.remove('collapse');
+		n2.classList.add('collapse');
+	});
+
+	const usernameField = document.querySelector('#username');
+	const unameCheck = document.querySelector('.username-check');
+	usernameField.addEventListener('keyup', (e) => {
+		// console.log("This");
+		const usernameVal = e.currentTarget.value;
+		if (usernameVal.length > 0) {
+			fetch("/accounts/check_username_availability", {
+				body: JSON.stringify({ username: usernameVal }),
+				method: "POST",
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					console.log("data", data);
+					if ((data.username_available && usernameVal.length >= 4) || usernameVal == `{{request.user.username}}`) {
+						unameCheck.innerHTML = `Available <i class="far fa-check-circle"></i>`;
+					}
+					else {
+						unameCheck.innerHTML = `Unavailable <i class="far fa-times-circle"></i>`;
+					}
+				});
+		}
+	});
+
+
+</script>
+{% endblock %}
