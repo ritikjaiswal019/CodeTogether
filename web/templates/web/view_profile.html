@@ -50,50 +50,110 @@
 												style="height: 140px; background-color: rgb(233, 236, 239);">
 												<!-- <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span> -->
 												{% if dp_exists %}
-												<img src="/media/{{request.user.email}}_pic.jpeg" alt="">
+												<img src="/media/{{cuser.email}}_pic.jpeg" alt="">
 												{% else %}
 												<img src="{% static 'web/imgs/user.jpg' %}" alt="">
 												{% endif %}
 											</div>
 										</div>
 									</div>
-									<div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
-										<div class="text-center text-sm-left mb-2 mb-sm-0">
-											<h4 class="pt-sm-2 pb-1 mb-0 text-nowrap text-start">
-												{{request.user.first_name}} {{request.user.last_name}}</h4>
-											<p class="mb-0 text-start">@{{request.user.username}}</p>
-											<!-- <div class="text-muted"><small>Last seen 2 hours ago</small></div> -->
-											<div class="mt-2">
-												<div class="collapse">
-													<form action="{% url 'upload_img' %}" method="POST"
-														enctype="multipart/form-data">
-														{% csrf_token %}
-														<input type="file" name="new_image" id="new_image"
-															class="btn text-start ps-0 d-block" value=""
-															accept="image/*">
-														<div class="text-start">
-															<button type="submit"
-																class="btn btn-outline-success text-start upload-btn">Upload</button>
-															<button type="button"
-																class="upload-toggle-back btn btn-outline-danger text-start">Cancel</button>
-														</div>
-													</form>
+									<div class="col justify-content-between mb-3">
+										<div class="row">
+											<div class="text-center text-sm-left mb-2 mb-sm-0 col-6">
+												<h4 class="pt-sm-2 pb-1 mb-0 text-nowrap text-start">
+													{{cuser.first_name}} {{cuser.last_name}}</h4>
+												<p class="mb-0 text-start">@{{cuser.username}}</p>
+												<!-- <div class="text-muted"><small>Last seen 2 hours ago</small></div> -->
+												<div class="mt-2">
+													<div class="collapse">
+														<form action="{% url 'upload_img' %}" method="POST"
+															enctype="multipart/form-data">
+															{% csrf_token %}
+															<input type="file" name="new_image" id="new_image"
+																class="btn text-start ps-0 d-block" value=""
+																accept="image/*">
+															<div class="text-start">
+																<button type="submit"
+																	class="btn btn-outline-success text-start upload-btn">Upload</button>
+																<button type="button"
+																	class="upload-toggle-back btn btn-outline-danger text-start">Cancel</button>
+															</div>
+														</form>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="text-center text-sm-right">
-											<span class="badge badge-secondary text-dark">
-												{% if request.user.is_superuser %}
-												Administrator
-												{% else %}
-												User
-												{% endif %}
-											</span>
-											<div class="text-muted"><small>{{ request.user.date_joined.date }}</small>
+											<div class="text-end col-6">
+												<span class="badge badge-secondary text-dark">
+													{% if cuser.is_superuser %}
+													Administrator
+													{% else %}
+													User
+													{% endif %}
+												</span>
+												<div class="text-muted"><small>{{ cuser.date_joined.date }}</small>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+								<div class="row mt-2">
+									<div class="col-4">
+										Email : 
+									</div>
+									<div class="col">
+										{{cuser.email}}
+									</div>
+								</div>
+								{% if cuser.userinfo.about != "" %}
+								<div class="row mt-2">
+									<div class="col-4">
+										About : 
+									</div>
+									<div class="col">
+										{{cuser.userinfo.about}}
+									</div>
+								</div>
+								{% endif %}
+								
+								<div class="row mt-2">
+									<div class="col-4">
+										LinkedIn :
+									</div>
+									<div class="col">
+										<a href="{{cuser.userinfo.linkedin}}" target="_blank">
+											{{cuser.userinfo.linkedin}}
+										</a>
+									</div>
+								</div>
+								<div class="row mt-2">
+									<div class="col-4 text-wrap">
+										Student / Professional:
+									</div>
+									<div class="col">
+										{{cuser.userinfo.storprof}}
+									</div>
+								</div>
+								{% if cuser.userinfo.storprof != "Other" %}
+								<div class="row mt-2">
+									<div class="col-4 text-wrap">
+										Institution :
+									</div>
+									<div class="col">
+										{{cuser.userinfo.where_do_you_work}}
+									</div>
+								</div>
+								<div class="row mt-2">
+									<div class="col-4 text-wrap">
+										Graduation Year :
+									</div>
+									<div class="col">
+										{{cuser.userinfo.graduation_year}}
+									</div>
+								</div>
+								
+								{% endif %}
+								
+								
 							</div>
 						</div>
 					</div>

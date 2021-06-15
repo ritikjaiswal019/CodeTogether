@@ -8,6 +8,7 @@ from django.http import JsonResponse
 import json
 import os
 
+User = get_user_model()
 fs = FileSystemStorage()
 
 
@@ -21,7 +22,6 @@ def index(request):
                 pset = False
             else:
                 pset = True 
-            User = get_user_model()
             users = User.objects.all().values('username')
             userlist = []
             for aus in users:
@@ -73,7 +73,7 @@ def update_basic_info(request):
             messages.success(request, 'Successfully Changed Details')
             return redirect('profile')
         else:
-            messages.danger(request, 'Successfully Changed Details')
+            messages.warning(request, 'Successfully Changed Details')
             return redirect('profile')
     else:
         return redirect('account_login')
@@ -104,15 +104,14 @@ def update_other_info(request):
                 cuserinfo.save()
                 return redirect('profile')
         else:
-            messages.danger(request,'Invalid Attempt, Please try again !!')
+            messages.warning(request,'Invalid Attempt, Please try again !!')
             return redirect('profile')
     else:
-        messages.danger(request, 'Invalid Attempt, Login To Continue')
+        messages.warning(request, 'Invalid Attempt, Login To Continue')
         return redirect('account_login')
 
 
 def profile(request):
-    User = get_user_model()
     users = User.objects.all().values('username')
     userlist = []
     for aus in users:
@@ -128,19 +127,23 @@ def profile(request):
 
 
 def view_profile(request, uname):
-    if fs.exists(request.user.email+"_pic.jpeg"):
-        dp = True
+    if User.objects.all().filter(username=uname).exists():
+        user_to_view = User.objects.all().get(username=uname)
+        if fs.exists(user_to_view.email+"_pic.jpeg"):
+            dp = True
+        else:
+            dp = False
+        return render(request, 'web/view_profile.html',{
+            "dp_exists":dp,
+            "cuser":user_to_view,
+        })
     else:
-        dp = False
-    return render(request, 'web/view_profile.html',{
-        "dp_exists":dp,
-    })
-
+        messages.warning(request, 'No such User Exists')
+        return redirect('Home')
 def check_username_availability(request):
     if request.method == "POST":
         data = json.loads(request.body)
         username = data['username']
-        User = get_user_model()
         if User.objects.all().filter(username=username).exists():
             return JsonResponse({'username_error':'This username is already taken'})
         return JsonResponse({'username_available':True})
