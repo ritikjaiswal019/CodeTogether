@@ -36,6 +36,7 @@ def index(request):
         else:
             return render(request, 'web/homepage.html')
     else:
+        messages.error(request, 'You must login continue')
         return redirect('account_login')
 
 def complete_profile(request):
@@ -104,42 +105,51 @@ def update_other_info(request):
                 cuserinfo.save()
                 return redirect('profile')
         else:
-            messages.warning(request,'Invalid Attempt, Please try again !!')
+            messages.error(request,'Invalid Attempt, Please try again !!')
             return redirect('profile')
     else:
-        messages.warning(request, 'Invalid Attempt, Login To Continue')
+        messages.error(request, 'Invalid Attempt, Login To Continue')
         return redirect('account_login')
 
 
 def profile(request):
-    users = User.objects.all().values('username')
-    userlist = []
-    for aus in users:
-        laus = list(aus.values())
-        userlist.append(laus[0])
-    if fs.exists(request.user.email+"_pic.jpeg"):
-        dp = True
-    else:
-        dp = False
-    return render(request, 'web/edit_profile.html',{
-        "dp_exists":dp,
-    })
-
-
-def view_profile(request, uname):
-    if User.objects.all().filter(username=uname).exists():
-        user_to_view = User.objects.all().get(username=uname)
-        if fs.exists(user_to_view.email+"_pic.jpeg"):
+    if request.user.is_authenticated:
+        users = User.objects.all().values('username')
+        userlist = []
+        for aus in users:
+            laus = list(aus.values())
+            userlist.append(laus[0])
+        if fs.exists(request.user.email+"_pic.jpeg"):
             dp = True
         else:
             dp = False
-        return render(request, 'web/view_profile.html',{
+        return render(request, 'web/edit_profile.html',{
             "dp_exists":dp,
-            "cuser":user_to_view,
         })
     else:
-        messages.warning(request, 'No such User Exists')
+        messages.error(request, 'You must login to view profile')
+        return redirect('account_login')
+
+
+def view_profile(request, uname):
+    if request.user.is_authenticated:
+        if User.objects.all().filter(username=uname).exists():
+            user_to_view = User.objects.all().get(username=uname)
+            if fs.exists(user_to_view.email+"_pic.jpeg"):
+                dp = True
+            else:
+                dp = False
+            return render(request, 'web/view_profile.html',{
+                "dp_exists":dp,
+                "cuser":user_to_view,
+            })
+        else:
+            messages.error(request, 'No such User Exists')
+            return redirect('Home')
+    else:
+        messages.error(request, 'You must login to view profile')
         return redirect('Home')
+        
 def check_username_availability(request):
     if request.method == "POST":
         data = json.loads(request.body)

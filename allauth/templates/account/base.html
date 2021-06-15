@@ -5,6 +5,7 @@
      <!-- Bootstrap CSS -->
      <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> -->
+     
     {% block extra_head %}
     {% endblock %}
   </head>
@@ -12,31 +13,27 @@
     {% block body %}
 
     {% if messages %}
-        <script>
-            var mes = "";
-        </script>
-        {% for message in messages %}
+    {% for message in messages %}
         <div class="alert alert-{{message.tags}} row" role="alert">
-            <div class="col-11">
-                {{message}}
-            </div>
-            <div class="col-1  text-center">
-                <button type="button" class="btn-close" aria-label="Close"></button>
-            </div>
+          <div class="col-11">
+            {{message}}
+          </div>
+          <div class="col-1  text-center">
+            <button type="button" class="close btn-close" aria-label="Close">
+              <span aria-hidden="true"> &times; </span>
+            </button>
+          </div>
         </div>
-        <script>
-            console.log(`{{message.tags}}`)
-            mes += `{{message}}`;
-        </script>
-        {% endfor %}
+    {% endfor %}
         <script>
             window.addEventListener('DOMContentLoaded',()=>{
-                const closeMessage = document.querySelector('.btn-close');
-                closeMessage.addEventListener('click',()=>{
-                    closeMessage.parentElement.parentElement.classList.add('d-none');
-                });
-                setTimeout(function(){ closeMessage.parentElement.parentElement.classList.add('d-none') }, 2000);
+              const closeMessage = document.querySelector('.btn-close');
+              closeMessage.addEventListener('click',()=>{
+                  closeMessage.parentElement.parentElement.classList.add('d-none');
+              });
+              setTimeout(function(){ closeMessage.parentElement.parentElement.classList.add('d-none') }, 5000);
             });
+            
         </script>
     {% endif %}
 

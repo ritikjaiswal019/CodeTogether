@@ -73,22 +73,16 @@
         </div>
     </nav>
     {% if messages %}
-        <script>
-            var mes = "";
-        </script>
+        
         {% for message in messages %}
-        <div class="alert alert-{{message.tags}} row" role="alert">
-            <div class="col-11">
-                {{message}}
+            <div class="alert alert-{{message.tags}} row" role="alert">
+                <div class="col-11">
+                    {{message}}
+                </div>
+                <div class="col-1  text-center">
+                    <button type="button" class="btn-close" aria-label="Close"></button>
+                </div>
             </div>
-            <div class="col-1  text-center">
-                <button type="button" class="btn-close" aria-label="Close"></button>
-            </div>
-        </div>
-        <script>
-            console.log(`{{message.tags}}`)
-            mes += `{{message}}`;
-        </script>
         {% endfor %}
         <script>
             window.addEventListener('DOMContentLoaded',()=>{
