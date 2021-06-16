@@ -4,17 +4,22 @@
 <div class="container">
     <div class="row my-4">
         <div class="col-lg-9">
-            {% for blog in blogs %}
             <div class="p-3 shadow-lg mb-4">
                 <h3>{{blog.title}}</h3>
                 <h5 class="fw-normal"><span>Basics of Arrays</span> <span class="text-muted fs-6">{{blog.timestamp.date}}</span></h5>
-                <p>{{blog.content | truncatechars:500}}</p>
-                <div class="d-flex justify-content-between">
-                    <button class="btn"><a href="/blogs/{{blog.slug}}" class="text-decoration-none text-dark"> READ MORE »</a></button>
-                    <button class="btn text-end">Comments <span class="badge bg-dark rounded-pill">2</span></button>
+                <p>{{blog.content}}</p>
+                <div class="">
+                    <!-- <button class="btn text-end">Comments <span class="badge bg-dark rounded-pill">2</span></button> -->
+                    <button class="btn text-end" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                        Comments <span class="badge bg-dark rounded-pill">2</span>
+                    </button>
+                    <div class="collapse mt-3" id="collapseExample">
+                        <div class="card card-body">
+                          Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                        </div>
+                      </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
         <div class="col-lg-3">
             <div class="p-3 shadow-lg">
@@ -31,4 +36,4 @@
         </div>
     </div>
 </div>
-{% endblock%}
+{% endblock %}

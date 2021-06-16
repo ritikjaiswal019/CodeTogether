@@ -13,7 +13,7 @@
     {% block body %}
 
     {% if messages %}
-    {% for message in messages %}
+      {% for message in messages %}
         <div class="alert alert-{{message.tags}} row" role="alert">
           <div class="col-11">
             {{message}}
@@ -24,7 +24,7 @@
             </button>
           </div>
         </div>
-    {% endfor %}
+        {% endfor %}
         <script>
             window.addEventListener('DOMContentLoaded',()=>{
               const closeMessage = document.querySelector('.btn-close');
@@ -49,8 +49,8 @@
         {% endif %}
       </ul>
     </div> -->
-    {% block content %}
     {% endblock %}
+    {% block content %}
     {% endblock %}
     {% block extra_body %}
     {% endblock %}

@@ -36,7 +36,7 @@ def index(request):
         else:
             return render(request, 'web/homepage.html')
     else:
-        messages.error(request, 'You must login continue')
+        messages.error(request, 'You must login to continue')
         return redirect('account_login')
 
 def complete_profile(request):
@@ -148,7 +148,7 @@ def view_profile(request, uname):
             return redirect('Home')
     else:
         messages.error(request, 'You must login to view profile')
-        return redirect('Home')
+        return redirect('account_login')
         
 def check_username_availability(request):
     if request.method == "POST":

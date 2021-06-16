@@ -27,46 +27,55 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                 <!-- <form class="d-flex px-5">
                     {% csrf_token %}
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-primary" type="submit">Search</button>
                 </form> -->
-
-                <div class="px-4">
-
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown user me-3 pe-3">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Welcome, {{ request.user.first_name}}
-                            </a>
-                            
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <!-- <li><a class="dropdown-item" href="#">Account</a></li> -->
-                                <li><a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'Home' %}">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Messages</i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="far fa-bell text-dark"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Contact Us</a>
-                        </li>
-
-
-                    </ul>
+                <div>
+                    <form class="d-flex ps-4" action="{% url 'search' %}" method="GET">
+                        <input class="form-control me-2" type="search" placeholder="Search Blogs" id="searchquery" name="query" aria-label="Search">
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    </form>
+                </div>
+                <div>
+                    <div class="px-4">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item dropdown user me-3 pe-3">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Welcome, {{ request.user.first_name}}
+                                </a>
+                                
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <!-- <li><a class="dropdown-item" href="#">Account</a></li> -->
+                                    <li><a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="{% url 'Home' %}">Home</a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" href="#">Messages</i></a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'blogHome' %}">Blogs</i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="far fa-bell text-dark"></i></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Contact Us</a>
+                            </li>
+    
+    
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,7 +105,9 @@
         </script>
     {% endif %}
     {% block body %}
+    {% endblock %}
 
+    {% block js %}
     {% endblock %}
     <!-- Optional JavaScript; choose one of the two! -->
 

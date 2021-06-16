@@ -18,6 +18,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
+admin.site.site_header = "CodeTogether Admin"
+admin.site.site_title = "CodeTogether Admin Panel"
+admin.site.index_title = "Welcome to CodeTogether Admin Panel"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('web.urls')),
