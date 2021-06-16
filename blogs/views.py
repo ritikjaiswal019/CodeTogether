@@ -4,4 +4,4 @@ from django.shortcuts import render, HttpResponse, redirect
 
 
 def blogHome(request):
-    return HttpResponse("Welcome To Blog Home")
+    return render(request, 'blogs/index.html')
