@@ -1,30 +1,105 @@
 {% extends 'blogs/basic.html' %}
 
 {% block body%}
+{% load humanize %}
+{% load extras %}
 <div class="container">
     <div class="row my-4">
         <div class="col-lg-9">
             <div class="p-3 shadow-lg mb-4">
-                <h3>{{blog.title}}</h3>
-                <h5 class="fw-normal"><span>Basics of Arrays</span> <span class="text-muted fs-6">{{blog.timestamp.date}}</span></h5>
-                <p>{{blog.content}}</p>
+                <div class="p-3">
+                    <h3>{{blog.title}}  <span
+                        class="text-muted fs-6">{{blog.timeStamp.date}}</span></h3>
+                    <!-- <h5 class="fw-normal"><span>Basics of Arrays</span> <span
+                            class="text-muted fs-6">{{blog.timeStamp.date}}</span></h5> -->
+                    <p>{{blog.content | safe}}</p>
+                </div>
                 <div class="">
                     <!-- <button class="btn text-end">Comments <span class="badge bg-dark rounded-pill">2</span></button> -->
-                    <button class="btn text-end" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                        Comments <span class="badge bg-dark rounded-pill">2</span>
+                    
+                    <button class="btn text-end" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseComments" aria-expanded="false" aria-controls="collapseComments">
+                        <h4> Comments <span class="badge bg-dark rounded-pill">{{comments.count}}</span></h4>
                     </button>
-                    <div class="collapse mt-3" id="collapseExample">
+                    <div class="collapse show mt-3" id="collapseComments">
                         <div class="card card-body">
-                          Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                            {% for comment in comments %}
+                            <div class="row my-1 mx-2">
+                                <div class="col-md-11 ">
+                                    <b><a href="/users/{{comment.user.username}}">{{comment.user.username}}</a></b>
+                                   
+                                    {% if comment.user|stringformat:"s" == blog.author|stringformat:"s" %}
+                                    <span class="badge bg-secondary">
+                                        Author</span>
+                                    {% endif %}
+                                    <span class="badge bg-secondary">
+                                        {{comment.timestamp| naturaltime}} </span>
+                                    <div class="my-1"> {{comment.comment}} </div>
+                                </div>
+                                <div class="replies ms-5 ">
+                                    {% for reply in replyDict|get_val:comment.sno %}
+                                        <div class="col-md-11">
+                                            <div class="col-md-11 ">
+                                                <b><a href="/users/{{reply.user.username}}">{{reply.user.username}}</a></b><span class="badge bg-secondary ms-2">
+                                                    {{reply.timestamp| naturaltime}}</span>
+                                            <div>{{reply.comment}}</div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="row ms-3">
+                                    <div class="col-4">
+                                        <!-- <button class="btn btn-outline-primary btn-sm w-50" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#collapseReply{{comment.sno}}"
+                                            aria-expanded="false" aria-controls="collapseReply{{comment.sno}}">
+                                            Reply
+                                        </button> -->
+                                        <a class="btn-sm w-50" href="">{{comment.timestamp.date}}</a>
+                                        <a class="btn-sm w-50" data-bs-toggle="collapse" href="#collapseReply{{comment.sno}}" role="button" aria-expanded="false" aria-controls="collapseReply{{comment.sno}}">
+                                            Reply
+                                          </a>
+                                        
+                                    </div>
+                                    <div class="collapse" id="collapseReply{{comment.sno}}">
+                                        <div class="card card-body my-3">
+                                            <form action="/blogs/postComment" method="post">
+                                                {% csrf_token %}
+                                                <div class="form-group">
+                                                    <label for="comment">Post a reply </label>
+                                                    <input type="text" class="form-control" name="comment" placeholder="Enter reply here">
+                                                    <input type="hidden" name="parentSno" value="{{comment.sno}}">
+                                                </div>
+                                                <input type="hidden" name="postSno" value="{{blog.sno}}">
+                                                <button type="submit" class="btn btn-primary mt-2 btn-sm">Post</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                </p>
+                            </div>
+                            {% endfor %}
+                            <form action="/blogs/postComment" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <h4><label for="comment">Leave a reply</label></h4>
+                                    <input type="text" class="form-control" name="comment"
+                                        placeholder="Enter comment here">
+                                </div>
+                                <input type="hidden" name="postSno" value="{{blog.sno}}">
+                                <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                            </form>
                         </div>
-                      </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-3">
             <div class="p-3 shadow-lg">
                 <h3>Title Heading</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo facilis perspiciatis assumenda dicta sed, officiis quasi deleniti consequatur, rerum, exercitationem eligendi numquam delectus omnis quam dolorem dolorum nesciunt maiores eum!</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo facilis perspiciatis assumenda dicta
+                    sed, officiis quasi deleniti consequatur, rerum, exercitationem eligendi numquam delectus omnis quam
+                    dolorem dolorum nesciunt maiores eum!</p>
                 <button class="btn btn-outline-secondary">READ MORE »</button>
             </div>
             <div class="mt-3 shadow-lg list-group">

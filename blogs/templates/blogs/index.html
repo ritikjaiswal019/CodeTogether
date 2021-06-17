@@ -1,5 +1,28 @@
 {% extends 'blogs/basic.html' %}
 
+{% block extrahead %}
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+        selector: '#basic-conf',
+        width: 600,
+        height: 300,
+        plugins: [
+            'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks code fullscreen insertdatetime media nonbreaking',
+            'table emoticons template paste help'
+        ],
+        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+            'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+            'forecolor backcolor emoticons | help',
+        menu: {
+            favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+        },
+        menubar: 'favs file edit view insert format tools table help',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        });
+    </script>
+{% endblock %}
 {% block body%}
 <div class="container">
     <div class="row my-4">
@@ -8,10 +31,9 @@
             <div class="p-3 shadow-lg mb-4">
                 <h3>{{blog.title}}</h3>
                 <h5 class="fw-normal"><span>Basics of Arrays</span> <span class="text-muted fs-6">{{blog.timestamp.date}}</span></h5>
-                <p>{{blog.content | truncatechars:500}}</p>
-                <div class="d-flex justify-content-between">
+                <div class="preview">{{blog.content|safe|truncatechars:500}}</div>
+                <div class="d-flex justify-content-between mt-2">
                     <button class="btn"><a href="/blogs/{{blog.slug}}" class="text-decoration-none text-dark"> READ MORE »</a></button>
-                    <button class="btn text-end">Comments <span class="badge bg-dark rounded-pill">2</span></button>
                 </div>
             </div>
             {% endfor %}
@@ -32,3 +54,16 @@
     </div>
 </div>
 {% endblock%}
+
+
+{% block js %}
+    <script>
+        let previews = document.getElementsByClassName('preview');
+        Array.from(previews).forEach((e)=>{
+            e.innerHTML = e.innerText;
+        });
+
+    </script>
+{% endblock%}
+
+

@@ -40,8 +40,9 @@
             </div>
         </div> -->
         <div class="p-3 shadow-lg mb-4">
-            <h3>{{blog.title}}</h3>
-            <h5 class="fw-normal"><span>Basics of Arrays</span> <span class="text-muted fs-6">{{blog.timestamp.date}}</span></h5>
+            <h3>{{blog.title}} </h3>
+            <p class="d-inline-block fs-6">Article by <a href="{% url 'view_profile' blog.author %}" class="text-decoration-none text-dark fw-bold p-0 m-0 align-top" target="_blank"> {{blog.author}}</a> | <span class="text-muted fs-6">{{blog.timeStamp.date}}</span></p>
+            <!-- <h5 class="fw-normal"><span>Basics of Arrays</span> <span class="text-muted fs-6">{{blog.timeStamp.date}}</span></h5> -->
             <p>{{blog.content | truncatechars:500}}</p>
             <div class="d-flex justify-content-between">
                 <button class="btn"><a href="/blogs/{{blog.slug}}" class="text-decoration-none text-dark"> READ MORE »</a></button>
