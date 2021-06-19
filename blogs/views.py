@@ -60,3 +60,6 @@ def postComment(request):
             messages.success(request, "Your reply has been posted successfully")
         
     return redirect(f"/blogs/{post.slug}")
+
+def createBlog(request):
+    return render(request, 'blogs/create_blog.html')

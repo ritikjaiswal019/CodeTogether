@@ -15,6 +15,14 @@
     <title>CodeTogether | {% block title%}{% endblock %}</title>
 
     {% block extrahead %}{% endblock %}
+    <style>
+        .outline-theme{
+            border-color: #1A237E;
+        }
+        .bg-theme{
+            background-color: #1A237E;
+        }
+    </style>
 </head>
 
 <body>
@@ -107,8 +115,17 @@
     {% block body %}
     {% endblock %}
 
+    <footer>
+        <div class="footer bg-theme text-light text-center py-4">
+            <div class="row px-3"> <small class="ft-text ml-4 ml-sm-5 mb-2">Copyright © 2021. All rights reserved. This project is developed by Ritik Jaiswal</small>
+                </div>
+        </div>
+    </footer>
+    
     {% block js %}
     {% endblock %}
+
+
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->

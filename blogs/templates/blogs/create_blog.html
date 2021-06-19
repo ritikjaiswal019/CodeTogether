@@ -2,11 +2,17 @@
 
 {% block extrahead %}
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <style>
+        .tox-tinymce{
+            width: 100vw !important;
+            height: 80vh !important;
+        }
+    </style>
     <script>
         tinymce.init({
-        selector: '#basic-conf',
-        width: 600,
-        height: 300,
+        selector: '#mytextarea',
+        // width: 100,
+        // height: 300,
         plugins: [
             'advlist autolink link image lists charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks code fullscreen insertdatetime media nonbreaking',
@@ -25,6 +31,14 @@
 {% endblock %}
 {% block body%}
     <form method="post">
-    <textarea id="mytextarea">Hello, World!</textarea>
+    <textarea id="mytextarea" style="height: 200px; width: 200px;">Hello, World!</textarea>
   </form>
+  <div id="recievedHtml"></div>
+  <button id="getHtml">Get HTML</button>
+  <script>
+      getHtml.addEventListener('click',()=>{
+        console.log("Working");
+        recievedHtml.innerHTML = tinyMCE.get('mytextarea').getContent();
+      });
+  </script>
 {% endblock%}
