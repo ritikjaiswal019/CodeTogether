@@ -3,6 +3,12 @@ nav{
     padding-right: 2rem;
     min-height: 4rem;
 }
+body{
+    overflow-x: hidden;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
 .navbar{
     box-shadow:  0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
@@ -14,7 +20,13 @@ nav{
         border-right: 1px solid black;
     }
     nav{
-        padding-right: 16%;
+        padding-right: 1%;
+        
     }
     
+}
+@media (min-width:1200px){
+    nav{
+        padding-right: 150px;
+    }
 }

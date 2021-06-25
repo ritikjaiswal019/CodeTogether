@@ -12,16 +12,23 @@ def blogHome(request):
     })
 
 def search(request):
-    query=request.GET['query']
+    query=request.GET['searchqry']
     if len(query)>78:
         allPosts=Post.objects.none()
+    # elif len(query)==0:
+    #     messages.warning(request, "Please type something to Search")
+    #     allPosts = Post.objects.none()
     else:
         allPostsTitle= Post.objects.filter(title__icontains=query)
         allPostsAuthor= Post.objects.filter(author__icontains=query)
         allPostsContent =Post.objects.filter(content__icontains=query)
-        allPosts=  allPostsTitle.union(allPostsContent, allPostsAuthor)
+        allPosts=allPostsTitle.union(allPostsContent, allPostsAuthor)
     if allPosts.count()==0:
         messages.warning(request, "No search results found. Please refine your query.")
+    if len(query)==0:
+        messages.warning(request, "Please type something to search")
+        allPosts = Post.objects.none()
+    
     params={'allPosts': allPosts, 'query': query}
     return render(request, 'blogs/search.html', params)
 

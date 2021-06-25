@@ -8,10 +8,15 @@
         <div class="col-lg-9">
             <div class="p-3 shadow-lg mb-4">
                 <div class="p-3">
-                    <h3>{{blog.title}}  <span
-                        class="text-muted fs-6">{{blog.timeStamp.date}}</span></h3>
-                    <!-- <h5 class="fw-normal"><span>Basics of Arrays</span> <span
-                            class="text-muted fs-6">{{blog.timeStamp.date}}</span></h5> -->
+                    <h3>{{blog.title}}</h3>
+                        <h6 class="fw-normal">
+                            <!-- <span>Basics of Arrays</span> -->
+                            <span>
+                                By 
+                                <a href="{% url 'view_profile' blog.author %}" class="text-decoration-none text-dark">{{blog.author}}</a>
+                            </span>
+                            <span class="text-muted fs-6">| {{blog.timeStamp.date}}</span>
+                        </h6>
                     <p>{{blog.content | safe}}</p>
                 </div>
                 <div class="">
