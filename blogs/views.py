@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from .models import Post, BlogComment
 from blogs.templatetags import extras
 from django.contrib import messages
+from django.db.models import Count
 
 # Create your views here.
 allPosts = Post.objects.all()
@@ -34,16 +35,22 @@ def search(request):
 
 def viewBlog(request, slug):
     if allPosts.filter(slug=slug).exists():
+        cuser = request.user
         post=Post.objects.filter(slug=slug).first()
         comments= BlogComment.objects.filter(post=post, parent=None)
         replies= BlogComment.objects.filter(post=post).exclude(parent=None)
+        popularPosts = Post.objects.annotate(likecount=Count('likes')).order_by('-likecount')[:4]
+        print(popularPosts,"\n")
         replyDict={}
+        liked = False
+        if post.likes.all().filter(username=cuser.username).exists():
+            liked = True
         for reply in replies:
             if reply.parent.sno not in replyDict.keys():
                 replyDict[reply.parent.sno]=[reply]
             else:
                 replyDict[reply.parent.sno].append(reply)
-        context={'blog':post, 'comments': comments, 'user': request.user, 'replyDict': replyDict}
+        context={'blog':post, 'comments': comments, 'user': request.user, 'replyDict': replyDict, 'liked': liked, 'popularposts': popularPosts}
         return render(request, "blogs/view_blog.html", context)
     else:
         messages.error(request, 'No Such Blog Exist')
@@ -70,3 +77,18 @@ def postComment(request):
 
 def createBlog(request):
     return render(request, 'blogs/create_blog.html')
+
+def likeunlike(request):
+    blogSno = request.POST.get('blogSno')
+    post = Post.objects.get(sno=blogSno)
+    cuser = request.user
+    alreadyliked = False
+    if post.likes.all().filter(username=cuser.username).exists():
+        alreadyliked=True
+    if alreadyliked:
+        alllikes = post.likes.all().exclude(username=cuser.username)
+        post.likes.set(alllikes)
+        post.save()
+    else:
+        post.likes.add(cuser.pk)
+    return redirect(f"/blogs/{post.slug}")

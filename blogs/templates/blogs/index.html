@@ -1,4 +1,5 @@
 {% extends 'blogs/basic.html' %}
+{% load static %}
 
 {% block extrahead %}
     <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
@@ -64,13 +65,7 @@
 
 
 {% block js %}
-    <script>
-        let previews = document.getElementsByClassName('preview');
-        Array.from(previews).forEach((e)=>{
-            e.innerHTML = e.innerText;
-        });
-
-    </script>
+<script src="{% static 'blogs/js/removehtml.js' %}"></script>
 {% endblock%}
 
 

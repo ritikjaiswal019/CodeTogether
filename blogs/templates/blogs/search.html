@@ -1,5 +1,6 @@
 {% extends 'blogs/basic.html' %}
 
+{% load static %}
 
 {% block body %}
 <div class="container my-3">
@@ -40,13 +41,12 @@
             </div>
         </div> -->
         <div class="p-3 shadow-lg mb-4">
-            <h3>{{blog.title}} </h3>
+            <h3><a href="/blogs/{{blog.slug}}" class="text-decoration-none text-dark">{{blog.title}}</a> </h3>
             <p class="d-inline-block fs-6">Article by <a href="{% url 'view_profile' blog.author %}" class="text-decoration-none text-dark fw-bold p-0 m-0 align-top" target="_blank"> {{blog.author}}</a> | <span class="text-muted fs-6">{{blog.timeStamp.date}}</span></p>
             <!-- <h5 class="fw-normal"><span>Basics of Arrays</span> <span class="text-muted fs-6">{{blog.timeStamp.date}}</span></h5> -->
             <div class="preview">{{blog.content|safe|truncatechars:500}}</div>
             <div class="d-flex justify-content-between">
                 <button class="btn"><a href="/blogs/{{blog.slug}}" class="text-decoration-none text-dark"> READ MORE »</a></button>
-                <button class="btn text-end">Comments <span class="badge bg-dark rounded-pill">2</span></button>
             </div>
         </div>
 
@@ -58,14 +58,8 @@
 
 {% block js %}
 <script>
-    window.addEventListener("DOMContentLoaded",()=>{
-        console.log("DOMContent is loaded");
-        const schq = document.getElementById('searchquery');
-        schq.value = `{{query}}`;
-        let previews = document.getElementsByClassName('preview');
-        Array.from(previews).forEach((e)=>{
-            e.innerHTML = e.innerText;
-        });
-    });
+    const schq = document.getElementById('searchquery');
+    schq.value = `{{query}}`;
 </script>
+<script src="{% static 'blogs/js/removehtml.js' %}"></script>
 {% endblock%}

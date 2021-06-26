@@ -2,12 +2,58 @@
 
 {% load i18n %}
 {% load account %}
+{% load static %}
 
 {% block head_title %}{% trans "Confirm E-mail Address" %}{% endblock %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'web/css/login.css' %}">
+{% endblock %}
 
 {% block content %}
-<h1>{% trans "Confirm E-mail Address" %}</h1>
+
+
+<div class="container-fluid px-1 px-md-5 px-lg-1 px-xl-5 py-4 mx-auto">
+    <div class="card card0 border-0">
+        <div class="row d-flex">
+            <div class="col-lg-6">
+                <div class="card1 pb-5">
+                    <div class="row px-3 justify-content-center mt-5 mb-5 border-line"> <img src="https://i.imgur.com/uNGdWHi.png" class="image"> </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="card2 card border-0 px-4 py-5">
+                  <div class="row mb-4 px-3">
+                      <h4>Confirm E-mail Address</h4>
+                    {% if confirmation %}
+
+                    {% user_display confirmation.email_address.user as user_display %}
+
+                    <p>{% blocktrans with confirmation.email_address.email as email %}Please confirm that <a href="mailto:{{ email }}">{{ email }}</a> is an e-mail address for user {{ user_display }}.{% endblocktrans %}</p>
+
+                    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                    {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-success">{% trans 'Confirm' %}</button>
+                    </form>
+
+                    {% else %}
+
+                    {% url 'account_email' as email_url %}
+
+                    <p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
+
+                    {% endif %}
+                    
+                </div>
+          </div>
+      </div>
+    </div>
+      <div class="footer bg-blue py-4">
+          <div class="row px-3"> <small class="ft-text ml-4 ml-sm-5 mb-2">Copyright © 2019. All rights reserved.</small>
+              </div>
+      </div>
+<!-- <h1>{% trans "Confirm E-mail Address" %}</h1>
 
 {% if confirmation %}
 
@@ -26,6 +72,6 @@
 
 <p>{% blocktrans %}This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.{% endblocktrans %}</p>
 
-{% endif %}
+{% endif %} -->
 
 {% endblock %}

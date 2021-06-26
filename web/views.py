@@ -7,6 +7,7 @@ from .models import UserInfo
 from django.http import JsonResponse
 import json
 import os
+from allauth.account.models import EmailAddress
 
 User = get_user_model()
 fs = FileSystemStorage()
@@ -17,6 +18,8 @@ fs = FileSystemStorage()
 def index(request):
     if request.user.is_authenticated:
         cuser = request.user
+        emails = EmailAddress.objects.all()
+
         if cuser.first_name == '' or cuser.last_name == '' or cuser.email == '' or not cuser.has_usable_password():
             if request.user.has_usable_password():
                 pset = False
@@ -33,11 +36,13 @@ def index(request):
                 # "allusers":users,
                 "userlist":userlist,
             })
+        elif not emails.get(email=cuser.email).verified:
+            messages.error(request, 'You must  verify your primary email to continue')
+            return redirect('account_email')
         else:
             return render(request, 'web/homepage.html')
     else:
-        messages.error(request, 'You must login to continue')
-        return redirect('account_login')
+        return render(request, 'account/login.html')
 
 def complete_profile(request):
     if request.method == "POST":

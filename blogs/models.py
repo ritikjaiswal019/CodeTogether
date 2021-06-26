@@ -11,6 +11,7 @@ class Post(models.Model):
     content = models.TextField()
     slug = models.CharField(max_length=130)
     timeStamp = models.DateTimeField(blank=True)
+    likes = models.ManyToManyField(User, blank=True, related_name="liked_users")
     def __str__(self):
         return f"{self.title} : by  {self.author} "
 
@@ -19,7 +20,7 @@ class BlogComment(models.Model):
     comment=models.TextField()
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     post=models.ForeignKey(Post, on_delete=models.CASCADE)
-    parent=models.ForeignKey('self',on_delete=models.CASCADE, null=True )
+    parent=models.ForeignKey('self',on_delete=models.CASCADE, null=True, blank=True )
     timestamp= models.DateTimeField(default=now)
 
     def __str__(self):

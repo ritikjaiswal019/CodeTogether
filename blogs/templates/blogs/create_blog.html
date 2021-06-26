@@ -1,44 +1,65 @@
 {% extends 'blogs/basic.html' %}
 
 {% block extrahead %}
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <style>
-        .tox-tinymce{
-            width: 100vw !important;
-            height: 80vh !important;
-        }
-    </style>
-    <script>
-        tinymce.init({
+<script src="https://cdn.tiny.cloud/1/hgh5w07aphq52w5fq87zqa5wahzke64anc4jd2ffqv8yfa8v/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<style>
+    .tox-tinymce {
+        margin: auto;
+        width: 100% !important;
+        height: 80vh !important;
+    }
+</style>
+<script>
+    tinymce.init({
         selector: '#mytextarea',
-        // width: 100,
-        // height: 300,
+        init_instance_callback : function(editor) {
+            var freeTiny = document.querySelector('.tox .tox-notification--in');
+            freeTiny.style.display = 'none';
+        },
         plugins: [
             'advlist autolink link image lists charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks code fullscreen insertdatetime media nonbreaking',
             'table emoticons template paste help'
         ],
         toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-            'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+            'bullist numlist outdent indent | print preview fullpage | ' +
             'forecolor backcolor emoticons | help',
         menu: {
-            favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+            insert: { title: 'Insert', items: 'template hr' }, //link media remove it
+            favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
         },
         menubar: 'favs file edit view insert format tools table help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-        });
-    </script>
+    });
+</script>
 {% endblock %}
 {% block body%}
+<div class="container my-4">
     <form method="post">
-    <textarea id="mytextarea" style="height: 200px; width: 200px;">Hello, World!</textarea>
-  </form>
-  <div id="recievedHtml"></div>
-  <button id="getHtml">Get HTML</button>
-  <script>
-      getHtml.addEventListener('click',()=>{
-        console.log("Working");
-        recievedHtml.innerHTML = tinyMCE.get('mytextarea').getContent();
-      });
-  </script>
+    <h4 class="px-4 text-center">Design Your Blog</h4>
+    <div class="">
+        <div class="mb-3">
+            <h5 for="title" class="form-label px-5">Title</h5>
+            <input type="text" class="form-control" id="titleforblog">
+          </div>
+    </div>
+    <div class="">
+        <div class="mb-3">
+            <h5 class="px-5">Slug <a href="/media/whatisslug.jpeg" target="blank" class="mx-3 fw-normal fs-6 text-decoration-underline text-dark">(What is slug?)</a></h5>
+            <input type="text" class="form-control" id="slug">
+        </div>
+    </div>
+    <div class="">
+        <h5 class="px-5">Content:</h5>
+        <textarea id="mytextarea" style="height: 200px; width: 200px;">Hello, World!</textarea>
+    </div>
+    <input id="recievedHtml" type="hidden"></input>
+    <button class="btn btn-outline-success my-4 w-25" id="getHtmlandSubmit">Post Your Blog</button>
+    </form>
+</div>
+<script>
+    getHtmlandSubmit.addEventListener('click', () => {
+        recievedHtml.value = tinyMCE.get('mytextarea').getContent();
+    });
+</script>
 {% endblock%}
