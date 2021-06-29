@@ -3,6 +3,8 @@ from .models import Post, BlogComment
 from blogs.templatetags import extras
 from django.contrib import messages
 from django.db.models import Count
+from django.http import JsonResponse
+import json
 
 # Create your views here.
 allPosts = Post.objects.all()
@@ -40,7 +42,6 @@ def viewBlog(request, slug):
         comments= BlogComment.objects.filter(post=post, parent=None)
         replies= BlogComment.objects.filter(post=post).exclude(parent=None)
         popularPosts = Post.objects.annotate(likecount=Count('likes')).order_by('-likecount')[:4]
-        print(popularPosts,"\n")
         replyDict={}
         liked = False
         if post.likes.all().filter(username=cuser.username).exists():
@@ -75,20 +76,64 @@ def postComment(request):
         
     return redirect(f"/blogs/{post.slug}")
 
+# def postComment(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         cuser = request.user
+#         comment = data['comment']
+#         blogSno = data['blogsno']
+#         parentSno = data['parentsno']
+#         # print(parentsno)
+#         post= Post.objects.get(sno=blogSno)
+#         # parentSno= request.POST.get('parentSno')
+#         # parentSno = None
+#         if parentSno=="":
+#             comment=BlogComment(comment= comment, user=cuser, post=post)
+#             comment.save()
+#             return JsonResponse({'commentSuccess':True, 'isReply':False,'commentsno':comment.sno})
+#         else:
+#             parent= BlogComment.objects.get(sno=parentSno)
+#             comment=BlogComment(comment= comment, user=cuser, post=post , parent=parent)
+#             comment.save()
+#             return JsonResponse({'commentSuccess':True, 'isReply':True})
+
 def createBlog(request):
     return render(request, 'blogs/create_blog.html')
 
+# def likeunlike(request):
+#     blogSno = request.POST.get('blogSno')
+#     post = Post.objects.get(sno=blogSno)
+#     cuser = request.user
+#     alreadyliked = False
+#     if post.likes.all().filter(username=cuser.username).exists():
+#         alreadyliked=True
+#     if alreadyliked:
+#         alllikes = post.likes.all().exclude(username=cuser.username)
+#         post.likes.set(alllikes)
+#         post.save()
+#     else:
+#         post.likes.add(cuser.pk)
+#     return redirect(f"/blogs/{post.slug}")
+
 def likeunlike(request):
-    blogSno = request.POST.get('blogSno')
-    post = Post.objects.get(sno=blogSno)
-    cuser = request.user
-    alreadyliked = False
-    if post.likes.all().filter(username=cuser.username).exists():
-        alreadyliked=True
-    if alreadyliked:
-        alllikes = post.likes.all().exclude(username=cuser.username)
-        post.likes.set(alllikes)
-        post.save()
-    else:
-        post.likes.add(cuser.pk)
-    return redirect(f"/blogs/{post.slug}")
+    if request.method == "POST":
+        data = json.loads(request.body)
+        cuser = request.user
+        blo = data['blno']
+        post = Post.objects.get(sno=blo)
+        alreadyliked = False
+        if post.likes.all().filter(username=cuser.username).exists():
+            alreadyliked=True
+        if alreadyliked:
+            alllikes = post.likes.all().exclude(username=cuser.username)
+            post.likes.set(alllikes)
+            post.save()
+            return JsonResponse({'isLikedTrue':'False'})
+        else:
+            post.likes.add(cuser.pk)
+            return JsonResponse({'isLikedTrue':'True'})
+
+        
+        # if User.objects.all().filter(username=username).exists():
+        #     return JsonResponse({'username_error':'This username is already taken'})
+        # return JsonResponse({'username_available':True})

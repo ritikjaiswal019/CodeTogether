@@ -178,3 +178,4 @@ def remove_profile(request):
         if fs.exists(request.user.email+"_pic.jpeg"):
             fs.delete(request.user.email+"_pic.jpeg")
     return redirect('profile')
+asddasd

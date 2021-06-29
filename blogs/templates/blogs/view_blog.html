@@ -14,13 +14,13 @@
                             <!-- <span>Basics of Arrays</span> -->
                             <span>
                                 By 
-                                <a href="{% url 'view_profile' blog.author %}" class="text-decoration-none text-dark">{{blog.author}}</a>
+                                <a href="{% url 'view_profile' blog.author %}" class="text-decoration-none text-dark blogauthor">{{blog.author}}</a>
                             </span>
                             <span class="text-muted fs-6">| {{blog.timeStamp.date}}</span>
                         </h6>
                     <p>{{blog.content | safe}}</p>
                     <div class="text-start border-bottom">
-                        <p class="mb-0 px-3 text-muted">{{ blog.likes.count }} Likes | {{comments.count}} Comments </p>
+                        <div class="mb-0 px-3 text-muted"><span id="likescnt">{{ blog.likes.count }}</span> Likes | <span id="commentcnt">{{comments.count}}</span> Comments </div>
                     </div>
                 </div>
                 <div class="">
@@ -28,16 +28,16 @@
                     
                     <div class="d-flex justify-content-between px-3">
                         <div>
-                            <form action="{% url 'likeunlike' %}" method="POST">
-                                {% csrf_token%}
-                                <input type="hidden" name="blogSno" value={{blog.sno}}>
+                            {% if request.user.is_authenticated %}
+                                <input type="hidden" name="blogSno" id="bsno" value={{blog.sno}}>
                                 {% if liked %}
-                                <button class="btn"><i class="fas fa-thumbs-up fs-4"></i></button>
+                                <button class="btn p-0" id="likebtn"><i id="likeicn" class="fas fa-thumbs-up fs-4"></i>
                                 {% else %}
-                                <button class="btn"><i class="far fa-thumbs-up fs-4"></i></button>
+                                <button class="btn p-0" id="likebtn"><i id="likeicn" class="far fa-thumbs-up fs-4"></i>
                                 {% endif %}
                                 Like
-                            </form>
+                                </button>
+                            {% endif %}
                         </div>
                         <div>
                             <button class="btn text-end" type="button" data-bs-toggle="collapse"
@@ -148,4 +148,47 @@
 
 {% block js %}
 <script src="{% static 'blogs/js/removehtml.js' %}"></script>
+<script>
+    window.addEventListener('DOMContentLoaded',()=>{
+
+        // Mananging Likes
+        const likebtn = document.querySelector('#likebtn');
+        const likeicn = document.querySelector('#likeicn');
+        const likescnt = document.querySelector('#likescnt');
+        let currentlikes = parseInt(likescnt.innerHTML);
+        likebtn.addEventListener('click',()=>{
+            likebtn.disabled = true;
+            if(likebtn.firstChild.classList.contains('far')){
+                fetch("/blogs/likeunlike", {
+                    body: JSON.stringify({ blno: {{blog.sno}} }),
+                    method: "POST",
+                })
+                .then((res) => res.json())
+                .then((data) => {
+                        likeicn.classList.remove('far');
+                        likeicn.classList.add('fas');
+                        currentlikes++;
+                        likescnt.innerHTML = currentlikes.toString();
+                    });
+                }
+                else{
+                    fetch("/blogs/likeunlike", {
+                        body: JSON.stringify({ blno: {{blog.sno}} }),
+                        method: "POST",
+                    })
+                    .then((res) => res.json())
+                    .then((data) => {			
+                        likeicn.classList.add('far');
+                        likeicn.classList.remove('fas');
+                        currentlikes--;
+                        likescnt.innerHTML = currentlikes.toString();
+                    });
+                }
+                likebtn.disabled = false;
+        });
+
+
+        
+    });
+</script>
 {% endblock%}
