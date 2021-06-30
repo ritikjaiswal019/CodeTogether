@@ -8,6 +8,7 @@ from django.http import JsonResponse
 import json
 import os
 from allauth.account.models import EmailAddress
+from blogs.models import Post
 
 User = get_user_model()
 fs = FileSystemStorage()
@@ -178,4 +179,17 @@ def remove_profile(request):
         if fs.exists(request.user.email+"_pic.jpeg"):
             fs.delete(request.user.email+"_pic.jpeg")
     return redirect('profile')
-asddasd
+
+def search(request):
+    # if request.method == "GET":
+    query = request.GET['searchqry']
+    if len(query)>78:
+        messages.error(request, 'Invalid Search Query')
+        return redirect('Home')
+    elif len(query)==0:
+        messages.error(request, 'Please type something to search')
+        return redirect('Home')
+    allusers = User.objects.filter(username__icontains=query) | User.objects.filter(first_name__icontains=query) | User.objects.filter(last_name__icontains=query)
+    allpost = Post.objects.filter(title__icontains=query) | Post.objects.filter(author__icontains=query) | Post.objects.filter(content__icontains=query)
+    params = {'allPost' : allpost, 'allUsers' : allusers}
+    return render(request, 'web/search.html', params)

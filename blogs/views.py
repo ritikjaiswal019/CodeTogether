@@ -18,9 +18,6 @@ def search(request):
     query=request.GET['searchqry']
     if len(query)>78:
         allPosts=Post.objects.none()
-    # elif len(query)==0:
-    #     messages.warning(request, "Please type something to Search")
-    #     allPosts = Post.objects.none()
     else:
         allPostsTitle= Post.objects.filter(title__icontains=query)
         allPostsAuthor= Post.objects.filter(author__icontains=query)
@@ -76,44 +73,8 @@ def postComment(request):
         
     return redirect(f"/blogs/{post.slug}")
 
-# def postComment(request):
-#     if request.method == "POST":
-#         data = json.loads(request.body)
-#         cuser = request.user
-#         comment = data['comment']
-#         blogSno = data['blogsno']
-#         parentSno = data['parentsno']
-#         # print(parentsno)
-#         post= Post.objects.get(sno=blogSno)
-#         # parentSno= request.POST.get('parentSno')
-#         # parentSno = None
-#         if parentSno=="":
-#             comment=BlogComment(comment= comment, user=cuser, post=post)
-#             comment.save()
-#             return JsonResponse({'commentSuccess':True, 'isReply':False,'commentsno':comment.sno})
-#         else:
-#             parent= BlogComment.objects.get(sno=parentSno)
-#             comment=BlogComment(comment= comment, user=cuser, post=post , parent=parent)
-#             comment.save()
-#             return JsonResponse({'commentSuccess':True, 'isReply':True})
-
 def createBlog(request):
     return render(request, 'blogs/create_blog.html')
-
-# def likeunlike(request):
-#     blogSno = request.POST.get('blogSno')
-#     post = Post.objects.get(sno=blogSno)
-#     cuser = request.user
-#     alreadyliked = False
-#     if post.likes.all().filter(username=cuser.username).exists():
-#         alreadyliked=True
-#     if alreadyliked:
-#         alllikes = post.likes.all().exclude(username=cuser.username)
-#         post.likes.set(alllikes)
-#         post.save()
-#     else:
-#         post.likes.add(cuser.pk)
-#     return redirect(f"/blogs/{post.slug}")
 
 def likeunlike(request):
     if request.method == "POST":
@@ -132,8 +93,3 @@ def likeunlike(request):
         else:
             post.likes.add(cuser.pk)
             return JsonResponse({'isLikedTrue':'True'})
-
-        
-        # if User.objects.all().filter(username=username).exists():
-        #     return JsonResponse({'username_error':'This username is already taken'})
-        # return JsonResponse({'username_available':True})

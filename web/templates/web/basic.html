@@ -27,15 +27,15 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse " id="navbarSupportedContent">
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                 <!-- <form class="d-flex px-5">
                     {% csrf_token %}
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-primary" type="submit">Search</button>
                 </form> -->
                 <div>
-                    <form class="d-flex ps-4" action="/blogs/search" method="GET">
-                        <input class="form-control me-2" type="search" placeholder="Search Blogs" id="searchquery" name="searchqry" aria-label="Search">
+                    <form class="d-flex ps-4" action="/search" method="GET">
+                        <input class="form-control me-2" type="search" placeholder="Search" id="searchquery" name="searchqry" aria-label="Search">
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </form>
                 </div>
