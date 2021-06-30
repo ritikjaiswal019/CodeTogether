@@ -10,8 +10,9 @@ import json
 allPosts = Post.objects.all()
 
 def blogHome(request):
+    popularPosts = Post.objects.annotate(likecount=Count('likes')).order_by('-likecount')[:4]
     return render(request, 'blogs/index.html',{
-        "blogs":allPosts
+        "blogs":allPosts,'popularposts': popularPosts
     })
 
 def search(request):

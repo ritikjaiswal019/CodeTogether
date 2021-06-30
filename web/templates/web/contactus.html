@@ -1,0 +1,41 @@
+{% extends 'web/basic.html' %}
+
+{% block body %}
+
+<div class="m-4 ">
+    <div class="row p-4">
+        <div class="col-md-6">
+            <form action="/contactus/submit" method="POST">
+                {% csrf_token %}
+                <div class="row mb-2 gx-1 p-0">
+                    <div class="form-floating col-lg">
+                        <input type="text" class="form-control shadow-lg" name="firstname" readonly id="floatingfname" placeholder="John" value="{{request.user.first_name}}">
+                        <label for="floatingfname">First Name</label>
+                    </div>
+                    <!-- <div class="col-lg-1"></div> -->
+                    <div class="form-floating col-lg">
+                        <input type="text" class="form-control shadow-lg" name="lastname" readonly  id="floatinglname" placeholder="John" value="{{request.user.last_name}}">
+                        <label for="floatinglname">Last Name</label>
+                    </div>
+                </div>
+                <div class="form-floating mb-2">
+                    <input type="email" class="form-control shadow-lg" readonly id="floatingEmail" placeholder="name@example.com" value="{{request.user.email}}">
+                    <label for="floatingEmail">Email address</label>
+                  </div>
+                <div class="form-floating">
+                    <textarea class="form-control shadow-lg" name="query" required placeholder="Leave a comment here" id="query" style="height: 100px"></textarea>
+                    <label for="query">Comments</label>
+                </div>
+                <button type="submit" class="btn btn-outline-primary mt-3 w-25">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-6 ">
+            <h3 class="text-center">Contact Info</h3>
+            <div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

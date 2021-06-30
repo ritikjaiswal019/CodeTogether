@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 import allauth
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
-from .models import UserInfo
+from .models import UserInfo, ContactForm
 from django.http import JsonResponse
 import json
 import os
@@ -189,7 +189,22 @@ def search(request):
     elif len(query)==0:
         messages.error(request, 'Please type something to search')
         return redirect('Home')
-    allusers = User.objects.filter(username__icontains=query) | User.objects.filter(first_name__icontains=query) | User.objects.filter(last_name__icontains=query)
+    allusers = User.objects.filter(username__icontains=query) | User.objects.filter(email__icontains=query) | User.objects.filter(first_name__icontains=query) | User.objects.filter(last_name__icontains=query) | User.objects.filter(userinfo__about__icontains=query) | User.objects.filter(userinfo__where_do_you_work__icontains=query)
     allpost = Post.objects.filter(title__icontains=query) | Post.objects.filter(author__icontains=query) | Post.objects.filter(content__icontains=query)
-    params = {'allPost' : allpost, 'allUsers' : allusers}
+    params = {'allBlogs' : allpost, 'allUsers' : allusers,'query':query}
     return render(request, 'web/search.html', params)
+
+def contact(request):
+    return render(request, 'web/contactus.html')
+
+def contactsubmit(request):
+    if request.method == "POST":
+        query = request.POST['query']
+        if len(query) == 0:
+            messages.error(request, 'Empty Form !! Please type something')
+        else:
+            messages.success(request, 'Your form has been successfully submitted')
+            new_form = ContactForm(user = request.user, query = query)
+            new_form.save()
+
+        return render(request, 'web/contactus.html')

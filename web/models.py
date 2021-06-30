@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 # Create your models here.
 
@@ -25,3 +26,11 @@ class UserInfo(models.Model):
     
     def __str__(self):
         return f"{self.id}." + f"{self.uname}".capitalize()
+
+class ContactForm(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    query = models.TextField()
+    timestamp = models.DateTimeField(default=now)
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name} wants to contact us"
+    

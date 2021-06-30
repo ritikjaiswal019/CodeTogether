@@ -125,13 +125,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 TIME_ZONE = 'Asia/Kolkata'
 
-TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 LOGIN_REDIRECT_URL = '/'

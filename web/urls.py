@@ -13,5 +13,7 @@ urlpatterns = [
     path('accounts/check_username_availability', csrf_exempt(views.check_username_availability), name="check_username_availability"),
     path('accounts/upload_img', views.upload_img, name="upload_img"),
     path('accounts/remove_profile', views.remove_profile, name="remove_profile"),
+    path('contactus', views.contact, name="contact"),
+    path('contactus/submit', views.contactsubmit, name="contactsubmit"),
 
 ]

@@ -1,4 +1,4 @@
-{% extends 'blogs/basic.html' %}
+{% extends 'web/basic.html' %}
 {% load static %}
 
 {% block extrahead %}
@@ -48,15 +48,15 @@
         </div>
         <div class="col-lg-3">
             <div class="p-3 shadow-lg">
-                <h3>Title Heading</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo facilis perspiciatis assumenda dicta sed, officiis quasi deleniti consequatur, rerum, exercitationem eligendi numquam delectus omnis quam dolorem dolorum nesciunt maiores eum!</p>
-                <button class="btn btn-outline-secondary">READ MORE »</button>
+                <h3>{{popularposts.0.title}}</h3>
+                <div class="preview">{{popularposts.0.content|safe|truncatechars:300}}</div>
+                <a href="/blogs/{{popularposts.0.slug}}" class="btn btn-outline-secondary">READ MORE »</a>
             </div>
             <div class="mt-3 shadow-lg list-group">
                 <li class="list-group-item list-group-item-secondary">Popular Posts</li>
-                <a href="#" class=" list-group-item list-group-item-action list-group-item-light">Arrays</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Hash Maps </a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Dynamic Programming</a>
+                <a href="/blogs/{{popularposts.1.slug}}" class=" list-group-item list-group-item-action list-group-item-light">{{popularposts.1.title}}</a>
+                <a href="/blogs/{{popularposts.2.slug}}" class="list-group-item list-group-item-action list-group-item-light">{{popularposts.2.title}}</a>
+                <a href="/blogs/{{popularposts.3.slug}}" class="list-group-item list-group-item-action list-group-item-light">{{popularposts.3.title}}</a>
             </div>
         </div>
     </div>
