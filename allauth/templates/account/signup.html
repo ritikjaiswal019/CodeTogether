@@ -46,7 +46,7 @@
       </div>
       <div class="col-lg-6">
         <div class="card2 card border-0 px-4 py-5">
-          <form class="signup" id="signup_form" method="POST" action="{% url 'account_signup' %}">
+          <form class="signup" id="signup_form" method="POST" action="{% url 'account_signupuser' %}">
             {% csrf_token %}
             <div class="row social_login mb-4 px-3">
               {% for provider in socialaccount_providers %}
@@ -77,76 +77,104 @@
               <div class="line"></div> <small class="or text-center">Or</small>
               <div class="line"></div>
             </div>
-            <div class="row">
-              <div class="col-sm-6 px-3">
-                <label class="mb-1" for="id_fname">
-                  <h6 class="mb-0 text-sm">First Name</h6>
-                </label>
-                <input class="" type="text" name="fname" required id="id_fname"
+
+              <div class="row">
+                <div class="col-sm-6 px-3">
+                  <label class="mb-1" for="id_fname">
+                    <h6 class="mb-0 text-sm">First Name</h6>
+                  </label>
+                  <input class="" type="text" name="fname" required id="id_fname"
                   placeholder="First Name">
-              </div>
-              <div class="col-sm-6 px-3">
-                <label class="mb-1" for="id_lname">
-                  <h6 class="mb-0 text-sm">Last Name</h6>
-                </label>
-                <input class="" type="text" name="lname" required id="id_lname"
+                </div>
+                <div class="col-sm-6 px-3">
+                  <label class="mb-1" for="id_lname">
+                    <h6 class="mb-0 text-sm">Last Name</h6>
+                  </label>
+                  <input class="" type="text" name="lname" required id="id_lname"
                   placeholder="Last Name">
+                </div>
               </div>
-            </div>
-            <div class="row px-3">
-              <label class="mb-1" for="id_username">
-                <h6 class="mb-0 text-sm">Username</h6>
-              </label>
-              <input class="" type="text" name="username" required id="id_username"
-              placeholder="Enter a valid username">
-            </div>
-            <div class="row px-3">
-              <label class="mb-1" for="id_email">
-                <h6 class="mb-0 text-sm">Email</h6>
-              </label>
-              <input type="email" name="email" placeholder="Enter Email" required id="id_email">
-            </div>
-            <div class="row px-3">
-              <label class="mb-1" for="id_password">
-                <h6 class="mb-0 text-sm">Enter Password</h6>
-              </label>
-              <input type="password" name="password" placeholder="Enter password" required id="id_password">
-            </div>
-            <div class="row px-3">
-              <label class="mb-1" for="id_password">
-                <h6 class="mb-0 text-sm">Confirm Password</h6>
-              </label>
-              <input type="password" name="password" placeholder="Enter password" required id="id_password">
-            </div>
-            <!-- <div class="row px-3 mb-4">
-              <div class="custom-control custom-checkbox custom-control-inline"> 
-                <input id="chk1" type="checkbox"
-                  name="remember" id="id_remember" class="custom-control-input"> 
-                  <label for="id_remember" class="custom-control-label text-sm">
-                    Remember me
-                  </label> 
-              </div>
-              <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
-            </div> -->
-            <div class="row mb-3 px-3 py-3"> <button type="submit" class="btn btn-blue text-center">Signup</button> </div>
-            <div class="row mb-4 px-3"> <small class="font-weight-bold">Already have an account? <a class="text-danger "
+              <div class="row px-3 rel-for-us">
+                <label class="mb-1" for="id_username">
+                  <h6 class="mb-0 text-sm">Username</h6>
+                </label>
+                <input class="" type="text" name="username" required id="id_username"
+                placeholder="Enter a valid username">
+                <span class="username-check">Available <i
+                  class="far fa-check-circle"></i></span>
+                </div>
+                <div class="row px-3">
+                  <label class="mb-1" for="id_email">
+                    <h6 class="mb-0 text-sm">Email</h6>
+                  </label>
+                  <input type="email" name="email" placeholder="Enter Email" required id="id_email">
+                </div>
+                <div class="row px-3">
+                  <label class="mb-1" for="id_password">
+                    <h6 class="mb-0 text-sm">Enter Password</h6>
+                  </label>
+                  <input type="password" name="password1" placeholder="Enter password" required id="id_password">
+                </div>
+                <div class="row px-3">
+                  <label class="mb-1" for="id_password">
+                    <h6 class="mb-0 text-sm">Confirm Password</h6>
+                  </label>
+                  <input type="password" name="password2" placeholder="Enter password" required id="id_password">
+                </div>
+                <!-- <div class="row px-3 mb-4">
+                  <div class="custom-control custom-checkbox custom-control-inline"> 
+                    <input id="chk1" type="checkbox"
+                    name="remember" id="id_remember" class="custom-control-input"> 
+                    <label for="id_remember" class="custom-control-label text-sm">
+                      Remember me
+                    </label> 
+                  </div>
+                  <a href="#" class="ml-auto mb-0 text-sm">Forgot Password?</a>
+                </div> -->
+                <div class="row mb-3 px-3 py-3"> <button type="submit" class="btn btn-blue text-center">Signup</button> </div>
+                <div class="row mb-4 px-3"> <small class="font-weight-bold">Already have an account? <a class="text-danger "
                   href="{{ login_url }}">Login</a></small> </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    <div class="footer bg-blue py-4">
-      <div class="row px-3"> <small class="ft-text ml-4 ml-sm-5 mb-2">Copyright © 2019. All rights reserved.</small>
-      </div>
-    </div>
-    <script>
-      const dt = new Date();
-      const year = dt.getFullYear();
+                
+              </div>
+            </form>
+            </div>
+          </div>
+          <div class="footer bg-blue py-4">
+            <div class="row px-3"> <small class="ft-text ml-4 ml-sm-5 mb-2">Copyright © 2019. All rights reserved.</small>
+            </div>
+          </div>
+          <script>
+            const dt = new Date();
+            const year = dt.getFullYear();
       const ft = document.querySelector('.ft-text');
       ft.innerHTML = `Copyright © ${year}. All rights reserved. This project is developed by Ritik Jaiswal`;
     </script>
   </div>
 </div>
 
+<script>
+  const usernameField = document.querySelector('#id_username');
+	const unameCheck = document.querySelector('.username-check');
+	usernameField.addEventListener('keyup', (e) => {
+		// console.log("This");
+		const usernameVal = e.currentTarget.value;
+		if (usernameVal.length > 0) {
+			fetch("/accounts/check_username_availability", {
+				body: JSON.stringify({ username: usernameVal }),
+				method: "POST",
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					console.log("data", data);
+					if ((data.username_available && usernameVal.length >= 4) || usernameVal == `{{request.user.username}}`) {
+						unameCheck.innerHTML = `Available <i class="far fa-check-circle"></i>`;
+					}
+					else {
+						unameCheck.innerHTML = `Unavailable <i class="far fa-times-circle"></i>`;
+					}
+				});
+		}
+	});
+</script>
 
 {% endblock %}

@@ -12,6 +12,7 @@ from django.http import HttpResponseRedirect
 from django.utils.encoding import force_str
 from django.utils.http import base36_to_int, int_to_base36, urlencode
 from django.utils.timezone import now
+# from allauth.account.models import EmailAddress
 
 from ..exceptions import ImmediateHttpResponse
 from ..utils import (
@@ -189,6 +190,7 @@ def perform_login(
             user=user,
             **signal_kwargs,
         )
+        # if EmailAddress.objects.get(email = user.email).verified:
         adapter.add_message(
             request,
             messages.SUCCESS,

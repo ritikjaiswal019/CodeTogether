@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import (
     Http404,
@@ -27,6 +28,7 @@ from .forms import (
     SignupForm,
     UserTokenForm,
 )
+from django.contrib.auth.models import User
 from .models import EmailAddress, EmailConfirmation, EmailConfirmationHMAC
 from .utils import (
     complete_signup,
@@ -881,3 +883,40 @@ class EmailVerificationSentView(TemplateView):
 
 
 email_verification_sent = EmailVerificationSentView.as_view()
+
+def signupuser(request):
+    if request.method == "POST":
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        username = request.POST['username']
+        email = request.POST['email']
+        pass1 = request.POST['password1']
+        pass2 = request.POST['password2']
+        error_count = 0
+        errors = ""
+        if pass1 != pass2:
+            error_count += 1
+            errors += 'Passwords do not match'
+        if User.objects.filter(username=username).exists():
+            if error_count>0:
+                errors += ' | Username Already Exists'
+            else:
+                errors += 'Username Already Exists'
+            error_count += 1
+        if EmailAddress.objects.filter(email = email).exists():
+            if error_count>0:
+                errors += ' | This is email is already linked to some other account'
+            else:
+                errors += 'This is email is already linked to some other account'
+            error_count += 1
+        if error_count == 0:
+            new_user = User(first_name=fname, last_name=lname, email=email, username=username, password=pass1)
+            new_user.set_password(pass1)
+            new_user.save()
+            new_email = EmailAddress(user=new_user, email=email, primary=True)
+            new_email.save()
+            messages.success(request,'Your profile has been created. Please login to continue')
+            return redirect('Home')
+        else:
+            messages.error(request, errors)
+            return redirect('account_signup')

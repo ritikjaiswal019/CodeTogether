@@ -38,7 +38,9 @@ def index(request):
                 "userlist":userlist,
             })
         elif not emails.get(email=cuser.email).verified:
-            messages.error(request, 'You must  verify your primary email to continue')
+            storage = messages.get_messages(request)
+            storage.used = True
+            messages.error(request, 'You must verify your primary email to continue!')
             return redirect('account_email')
         else:
             return render(request, 'web/homepage.html')
@@ -207,4 +209,4 @@ def contactsubmit(request):
             new_form = ContactForm(user = request.user, query = query)
             new_form.save()
 
-        return render(request, 'web/contactus.html')
+        return redirect('contact')
