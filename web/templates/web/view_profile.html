@@ -50,7 +50,7 @@
 												style="height: 140px; background-color: rgb(233, 236, 239);">
 												<!-- <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span> -->
 												{% if dp_exists %}
-												<img src="/media/{{cuser.email}}_pic.jpeg" alt="">
+												<img src="/media/profilepics/{{cuser.pk}}_pic.jpeg" alt="">
 												{% else %}
 												<img src="{% static 'web/imgs/user.jpg' %}" alt="">
 												{% endif %}
@@ -186,41 +186,7 @@
 </div>
 <script src="{% static 'web/js/check_username_availability.js'%}"></script>
 <script>
-	const uploadToggle = document.querySelector('.upload-toggle');
-	const uploadToggleBack = document.querySelector('.upload-toggle-back');
-	const n1 = uploadToggle.parentElement;
-	const n2 = uploadToggleBack.parentElement.parentElement.parentElement;
-	uploadToggle.addEventListener('click', () => {
-		n2.classList.remove('collapse');
-		n1.classList.add('collapse');
-	});
-	uploadToggleBack.addEventListener('click', () => {
-		n1.classList.remove('collapse');
-		n2.classList.add('collapse');
-	});
 
-	const usernameField = document.querySelector('#username');
-	const unameCheck = document.querySelector('.username-check');
-	usernameField.addEventListener('keyup', (e) => {
-		// console.log("This");
-		const usernameVal = e.currentTarget.value;
-		if (usernameVal.length > 0) {
-			fetch("/accounts/check_username_availability", {
-				body: JSON.stringify({ username: usernameVal }),
-				method: "POST",
-			})
-				.then((res) => res.json())
-				.then((data) => {
-					console.log("data", data);
-					if ((data.username_available && usernameVal.length >= 4) || usernameVal == `{{request.user.username}}`) {
-						unameCheck.innerHTML = `Available <i class="far fa-check-circle"></i>`;
-					}
-					else {
-						unameCheck.innerHTML = `Unavailable <i class="far fa-times-circle"></i>`;
-					}
-				});
-		}
-	});
 
 
 </script>

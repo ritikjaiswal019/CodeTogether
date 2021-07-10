@@ -50,7 +50,7 @@
 												style="height: 140px; background-color: rgb(233, 236, 239);">
 												<!-- <span style="color: rgb(166, 168, 170); font: bold 8pt Arial;">140x140</span> -->
 												{% if dp_exists %}
-												<img src="/media/{{request.user.email}}_pic.jpeg" alt="">
+												<img src="/media/profilepics/{{request.user.pk}}_pic.jpeg" alt="">
 												{% else %}
 												<img src="{% static 'web/imgs/user.jpg' %}" alt="">
 												{% endif %}

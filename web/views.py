@@ -127,7 +127,7 @@ def profile(request):
         for aus in users:
             laus = list(aus.values())
             userlist.append(laus[0])
-        if fs.exists(request.user.email+"_pic.jpeg"):
+        if fs.exists(f"./profilepics/{request.user.pk}_pic.jpeg"):
             dp = True
         else:
             dp = False
@@ -143,7 +143,7 @@ def view_profile(request, uname):
     if request.user.is_authenticated:
         if User.objects.all().filter(username=uname).exists():
             user_to_view = User.objects.all().get(username=uname)
-            if fs.exists(user_to_view.email+"_pic.jpeg"):
+            if fs.exists(f"./profilepics/{request.user.pk}_pic.jpeg"):
                 dp = True
             else:
                 dp = False
@@ -160,26 +160,27 @@ def view_profile(request, uname):
         
 def check_username_availability(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        username = data['username']
-        if User.objects.all().filter(username=username).exists():
-            return JsonResponse({'username_error':'This username is already taken'})
-        return JsonResponse({'username_available':True})
+        if request.user.is_authenticated:
+            data = json.loads(request.body)
+            username = data['username']
+            if User.objects.all().filter(username=username).exists():
+                return JsonResponse({'username_error':'This username is already taken'})
+            return JsonResponse({'username_available':True})
 
 def upload_img(request):
     if request.method == "POST":
         # img = request.POST['new_image']
         new_profile_pic = request.FILES['new_image']
-        if fs.exists(request.user.email+"_pic.jpeg"):
-            fs.delete(request.user.email+"_pic.jpeg")
-        fs.save(request.user.email+"_pic.jpeg", new_profile_pic)
+        if fs.exists(f"./profilepics/{request.user.pk}_pic.jpeg"):
+            fs.delete(f"./profilepics/{request.user.pk}_pic.jpeg")
+        fs.save(f"./profilepics/{request.user.pk}_pic.jpeg", new_profile_pic)
         # return HttpResponse(f'Profile of  <img src="/">')
         return redirect('profile')
 
 def remove_profile(request):
     if request.method == "POST":
-        if fs.exists(request.user.email+"_pic.jpeg"):
-            fs.delete(request.user.email+"_pic.jpeg")
+        if fs.exists(f"./profilepics/{request.user.pk}_pic.jpeg"):
+            fs.delete(f"./profilepics/{request.user.pk}_pic.jpeg")
     return redirect('profile')
 
 def search(request):
