@@ -10,8 +10,8 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.0/css/all.css"> 
-    <link rel="stylesheet" href="{% static 'web/css/basic.css '%}">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.0/css/all.css">
+    <link rel="stylesheet" href="{% static 'web/css/basic.css' %}">
     <title>CodeTogether | {% block title%}{% endblock %}</title>
 
     {% block extrahead %}{% endblock %}
@@ -47,7 +47,7 @@
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 Welcome, {{ request.user.first_name}}
                             </a>
-                            
+
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <!-- <li><a class="dropdown-item" href="#">Account</a></li> -->
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a></li>
@@ -81,7 +81,7 @@
         </div>
     </nav>
     {% if messages %}
-        
+
         {% for message in messages %}
             <div class="alert alert-{{message.tags}} row" role="alert">
                 <div class="col-11">
@@ -100,7 +100,7 @@
                 });
                 setTimeout(function(){ closeMessage.parentElement.parentElement.classList.add('d-none') }, 5000);
             });
-            
+
         </script>
     {% endif %}
     {% block body %}

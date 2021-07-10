@@ -27,7 +27,7 @@ SECRET_KEY = '+8_c#!+jk_gq_rdp*5n5)z3-2#=$4rb^%8ry7e)&z(tcsfh0k='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 ]
 
-SITE_ID = 1 
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,6 +139,7 @@ LOGIN_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 SOCIALACCOUNT_PROVIDERS = {
