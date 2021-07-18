@@ -4,11 +4,12 @@ import allauth
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from .models import UserInfo, ContactForm
+from django.db.models import Count
 from django.http import JsonResponse
 import json
 import os
 from allauth.account.models import EmailAddress
-from blogs.models import Post
+from blogs.models import Post, BlogComment
 
 User = get_user_model()
 fs = FileSystemStorage()
@@ -43,7 +44,10 @@ def index(request):
             messages.error(request, 'You must verify your primary email to continue!')
             return redirect('account_email')
         else:
-            return render(request, 'web/homepage.html')
+            popularPosts = Post.objects.annotate(likecount=Count('likes')).order_by('-likecount')[:3]
+            return render(request, 'web/homepage.html',{
+                'popularblogs':popularPosts,
+            })
     else:
         return render(request, 'account/login.html')
 

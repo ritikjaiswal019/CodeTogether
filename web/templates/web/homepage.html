@@ -1,7 +1,34 @@
 {% extends 'web/basic.html' %}
+{% load static %}
 
 {% block body%}
 
-</script>
+<div class="container my-4">
+    <h2 class="text-center">Top 3 Blogs</h2>
+    {% for blog in popularblogs %}
+        <div class="p-3 shadow-lg mb-4">
+            <h3>{{blog.title}}</h3>
+            <h6 class="fw-normal">
+                <!-- <span>Basics of Arrays</span> -->
+                <span>
+                    By 
+                    <a href="{% url 'view_profile' blog.author %}" class="text-decoration-none text-dark">{{blog.author}}</a>
+                </span>
+                <span class="text-muted fs-6">| {{blog.timeStamp.date}}</span>
+            </h6>
+            <div class="preview">{{blog.content|safe|truncatechars:500}}</div>
+            <div class="d-flex justify-content-between mt-2">
+                <button class="btn"><a href="/blogs/{{blog.slug}}" class="text-decoration-none text-dark"> READ MORE »</a></button>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="d-flex justify-content-center">
+        <a href="{% url 'blogHome' %}" class="btn btn-outline-primary" style="min-width:400px;">View All Blogs</a>
+    </div>
+</div>
 
-{% endblock%}
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'blogs/js/removehtml.js' %}"></script>
+{% endblock %}
